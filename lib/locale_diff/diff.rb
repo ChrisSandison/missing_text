@@ -45,6 +45,7 @@ module LocaleDiff
         
         parsed_yaml = open_yaml(yml)
 
+        # TODO: what if it's not?? Handle this case
         if parsed_yaml.present?
           files << yml.gsub(/\.yml/, '')[-2..-1]
           parsed_yaml.each do |_, body|
@@ -183,13 +184,13 @@ module LocaleDiff
     end
   end
 
-  private
+  def symbolize_keys_nested!(hash) 
+    hash.symbolize_keys!
+    hash.values.each { |value| symbolize_keys_nested!(value) if value.is_a?(Hash)}
+    hash
+  end
 
-    def symbolize_keys_nested!(hash) 
-      hash.symbolize_keys!
-      hash.values.each { |value| symbolize_keys_nested!(value) if value.is_a?(Hash)}
-      hash
-    end
+  private
 
     def open_yaml(yml)
       begin

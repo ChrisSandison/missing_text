@@ -30,7 +30,7 @@ describe LocaleDiff::Diff do
       @hash2 = {"key3" => @hash1 }
       @hash3 = {"key4" => @hash2 }
       @hash4 = {"key5" => @hash3 }
-      @diff = LangDiff.new(@args)
+      @diff = LocaleDiff::Diff.new(@args)
     end
 
     it "should symbolize keys for a flat hash" do
@@ -58,42 +58,42 @@ describe LocaleDiff::Diff do
   context :keymapping do
     it "should create a proper keymap for hash1_en.yml" do
       @args = {en: 'hash1/en.yml'}
-      @diff = LangDiff.new(@args)
+      @diff = LocaleDiff::Diff.new(@args)
       @diff.create_langmap!
       @diff.langmap[:en].should =~ [[:obj1], [:obj2], [:obj3, :obj31], [:obj3, :obj32]]
     end
 
     it "should create a proper keymap for hash1_fr.yml" do
       @args = {fr: 'hash1/fr.yml'}
-      @diff = LangDiff.new(@args)
+      @diff = LocaleDiff::Diff.new(@args)
       @diff.create_langmap!
       @diff.langmap[:fr].should =~ [[:obj1], [:obj3, :obj31]]
     end
 
     it "should create a proper keymap for hash2_en.yml" do
       @args = {en: 'hash2/en.yml'}
-      @diff = LangDiff.new(@args)
+      @diff = LocaleDiff::Diff.new(@args)
       @diff.create_langmap!
       @diff.langmap[:en].should =~ [[:obj1], [:obj2], [:obj3], [:obj4, :obj41], [:obj4, :obj42], [:obj4, :obj43, :obj431], [:obj4, :obj43, :obj432], [:obj4, :obj44], [:obj5], [:obj6]] #this does match what I've worked out in the test hash file
     end
 
     it "should create a proper keymap for hash2_fr.yml" do
       @args = {fr: 'hash2/fr.yml'}
-      @diff = LangDiff.new(@args)
+      @diff = LocaleDiff::Diff.new(@args)
       @diff.create_langmap!
       @diff.langmap[:fr].should =~ [[:obj1], [:obj4, :obj41], [:obj4, :obj43, :obj431], [:obj4, :obj44], [:obj5]] #this does match what I've worked out in the test hash file
     end
 
     it "should create a proper keymap for hash3_en.yml" do
       @args = {en: "hash3/en.yml"}
-      @diff = LangDiff.new(@args)
+      @diff = LocaleDiff::Diff.new(@args)
       @diff.create_langmap!
       @diff.langmap[:en].should =~ [[:obj1, :obj13, :obj131], [:obj1, :obj13, :obj132], [:obj1, :obj14]]
     end
 
     it "should create a proper keymap for hash3_fr.yml" do
       @args = {fr: "hash3/fr.yml"}
-      @diff = LangDiff.new(@args)
+      @diff = LocaleDiff::Diff.new(@args)
       @diff.create_langmap!
       @diff.langmap[:fr].should =~ [[:obj1, :obj11], [:obj1, :obj12], [:obj1, :obj13, :obj131], [:obj1, :obj13, :obj132], [:obj1, :obj13, :obj133, :obj1331], [:obj1, :obj14], [:obj1, :obj15]]
     end
@@ -105,7 +105,7 @@ describe LocaleDiff::Diff do
         en: "hash1/en.yml",
         fr: "hash1/fr.yml"
       }
-      @diff = LangDiff.new(@args)
+      @diff = LocaleDiff::Diff.new(@args)
       @diff.create_langmap!
       @diff.create_diffmap!
       @diff.diffmap[[:en, :fr]].should =~ [[:obj2], [:obj3, :obj32]]
@@ -117,7 +117,7 @@ describe LocaleDiff::Diff do
         en: "hash2/en.yml",
         fr: "hash2/fr.yml"
       }
-      @diff = LangDiff.new(@args)
+      @diff = LocaleDiff::Diff.new(@args)
       @diff.create_langmap!
       @diff.create_diffmap!
       @diff.diffmap[[:en, :fr]].should =~ [[:obj2], [:obj3], [:obj4, :obj42], [:obj4, :obj43, :obj432], [:obj6]]
@@ -129,7 +129,7 @@ describe LocaleDiff::Diff do
         en: "hash3/en.yml",
         fr: "hash3/fr.yml"
       }
-      @diff = LangDiff.new(@args)
+      @diff = LocaleDiff::Diff.new(@args)
       @diff.create_langmap!
       @diff.create_diffmap!
       @diff.diffmap[[:en, :fr]].should =~ []
