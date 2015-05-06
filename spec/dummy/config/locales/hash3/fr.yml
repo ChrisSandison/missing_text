@@ -1,0 +1,30 @@
+fr:
+  obj1:
+    obj11: dans la composition d’une sauce
+    obj12: entrent en général un liquide
+    obj13:
+      obj131: un corps gras et des condiments ou des épices.
+      obj132: Les gastronomes soulignent qu’une sauce doit mettre en valeur le plat qu’elle accompagne.
+      obj133:
+        obj1331: De nombreuses sauces sont basées sur le roux,
+    obj14: une préparation destinée à lier ou épaissir une sauce.
+    obj15: Les sauces remontent à l’époque médiévale.
+
+# keymap should yield:
+# [
+#   [:obj1, :obj11],
+#   [:obj1, :obj12],
+#   [:obj1, :obj13, :obj131],
+#   [:obj1, :obj13, :obj132],
+#   [:obj1, :obj13, :obj133, :obj1311],
+#   [:obj1, :obj14],
+#   [:obj1, :obj15]
+# ]
+
+# diffmap with hash3_en
+# [:fr, :en] => [
+#   [:obj1, :obj11],
+#   [:obj1, :obj12],
+#   [:obj1, :obj13, :obj133, :obj1311],
+#   [:obj1, :obj15]
+# ]

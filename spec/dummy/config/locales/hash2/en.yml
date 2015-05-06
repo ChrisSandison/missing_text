@@ -1,0 +1,40 @@
+# test yml
+
+en:
+  obj1: "The gravy may be further colored and flavored with gravy salt"
+  obj2: "(a simple mix of salt and caramel food colouring)"
+  obj3: "or gravy browning"
+  obj4:
+    obj41: "(gravy salt dissolved in water)"
+    obj42: "or ready-made cubes and powders can be used as a substitute for natural meat or vegetable extracts."
+    obj43: 
+      obj431: "Canned gravies are also available"
+      obj432: "Gravy is commonly served with roasts, meatloaf, rice,"
+    obj44: "and mashed potatoes"
+  obj5: "Types of gravy"
+  obj6: "Chocolate gravy is a variety of gravy made with fat, flour, cocoa powder and sometimes a small amount of sugar."
+
+# keymap should yield
+# { en: 
+#     [
+#       [:obj1],
+#       [:obj2],
+#       [:obj3],
+#       [:obj4, :obj41],
+#       [:obj4, :obj42],
+#       [:obj4, :obj43, :obj431],
+#       [:obj4, :obj43, :obj432],
+#       [:obj4, :obj44],
+#       [:obj5],
+#       [:obj6]
+#     ]
+# }
+
+# diffmap with hash2_fr.yml should yield
+# [:en, :fr] => [
+#   [:obj2],
+#   [:obj3],
+#   [:ob4, :obj42],
+#   [:obj4, :obj43, :obj432],
+#   [:obj6]
+# ]

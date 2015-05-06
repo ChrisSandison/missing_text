@@ -1,0 +1,21 @@
+# test yml
+
+en:
+  obj1: "Gravy is a sauce"
+  obj2: "made often from the juices that run naturally from meat or vegetables during cooking"
+  obj3: 
+    obj31: "In North America"
+    obj32: "the term can refer to a wider variety of sauces"
+
+# should yield
+# { en:
+#   [
+#     [:obj1],
+#     [:obj2],
+#     [:obj3, :obj11],
+#     [:obj3, :obj12]
+#   ]
+# }
+
+# diffmap with hash1_fr.yml should yield
+# { [:en, :fr] => [[:obj2], [:obj3, :obj32]]  }

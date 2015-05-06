@@ -1,0 +1,24 @@
+# test yml
+
+fr:
+  obj1: "Une sauce est une préparation dont la cuisson"
+  obj4:
+    obj41: "ou la préparation est indépendante du plat qu'elle accompagne"
+    obj43: 
+      obj431: "En cuisine française"
+    obj44: "dans la composition d’une sauce"
+  obj5: "entrent en général un liquide"
+
+# should yield
+# { fr: 
+#     [
+#       [:obj1],
+#       [:obj4, :obj41],
+#       [:obj4, :obj43, :obj431],
+#       [:obj4, :obj44],
+#       [:obj5]
+#     ]
+# }
+
+# diffmap with hash2_en.yml should yield
+# [:fr, :en] => []

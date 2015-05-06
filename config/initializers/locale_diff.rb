@@ -1,0 +1,1 @@
+LocaleDiff.locale_root = "config/locales/"

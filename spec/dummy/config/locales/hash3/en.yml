@@ -1,0 +1,18 @@
+en:
+  obj1: 
+    obj13:
+      obj131: Meat drippings (usually from bacon) and flour are used to make a thick roux
+      obj132:  The roux is salted and peppered to taste.
+      obj134: This is an extra test string that should show up for english
+    obj14: Water and milk (even parts) are added, and the liquid is brought back up to a boil.
+
+
+# keymap should yield:
+# [
+#   [:obj1, :obj13, :obj131],
+#   [:obj1, :obj13, :obj132],
+#   [:obj1, :obj14]
+# ]
+
+#`diffmap with hash3_fr
+# [:en, :fr] => []

@@ -1,0 +1,15 @@
+# test yml
+
+fr:
+  obj1: "Une sauce est une préparation culinaire liquide"
+  obj3: 
+    obj31: "ou semi-liquide destinée à accompagner une autre préparation"
+
+# should yield
+# [
+#   [:obj1],
+#   [:obj3, :obj31]
+# ]
+
+# diffmap with hash1_en.yml should yield
+# { [:fr, :en] => [] }
