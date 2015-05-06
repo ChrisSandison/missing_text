@@ -194,6 +194,7 @@ module LocaleDiff
 
     def open_yaml(yml)
       begin
+        # TODO: read in locale as .rb files?
         file = symbolize_keys_nested!(YAML.load_file("#{LocaleDiff.app_root}/#{LocaleDiff.locale_root}#{yml}"))
         return file
       rescue => error

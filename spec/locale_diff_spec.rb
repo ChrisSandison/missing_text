@@ -3,7 +3,6 @@ require 'locale_diff'
 
 describe LocaleDiff::Diff do
   before(:each) do
-    # TODO: write test files dynamically using faker and rand. Delete this files in an after
     @args = {
         en: 'hash1/en.yml',
         fr: 'hash1/fr.yml'
@@ -88,7 +87,7 @@ describe LocaleDiff::Diff do
       @args = {en: "hash3/en.yml"}
       @diff = LocaleDiff::Diff.new(@args)
       @diff.create_langmap!
-      @diff.langmap[:en].should =~ [[:obj1, :obj13, :obj131], [:obj1, :obj13, :obj132], [:obj1, :obj14]]
+      @diff.langmap[:en].should =~ [[:obj1, :obj13, :obj131], [:obj1, :obj13, :obj132], [:obj1, :obj13, :obj134], [:obj1, :obj14]]
     end
 
     it "should create a proper keymap for hash3_fr.yml" do
@@ -120,7 +119,7 @@ describe LocaleDiff::Diff do
       @diff = LocaleDiff::Diff.new(@args)
       @diff.create_langmap!
       @diff.create_diffmap!
-      @diff.diffmap[[:en, :fr]].should =~ [[:obj2], [:obj3], [:obj4, :obj42], [:obj4, :obj43, :obj432], [:obj6]]
+      @diff.diffmap[[:en, :fr]].should =~ [[:obj2], [:obj3], [:obj4, :obj42], [:obj4, :obj43, :obj432], [:obj1, :obj13, :obj134], [:obj6]]
       @diff.diffmap[[:fr, :en]].should =~ []
     end
 
