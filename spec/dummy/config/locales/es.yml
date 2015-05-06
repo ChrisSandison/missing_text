@@ -1,4 +1,4 @@
-en:
+es:
   obj1: 
     obj13:
       obj131: Meat drippings (usually from bacon) and flour are used to make a thick roux
@@ -7,9 +7,11 @@ en:
     obj14: Water and milk (even parts) are added, and the liquid is brought back up to a boil.
   obj2:
     obj21: Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis commodo.
-    obj22: Phasellus iaculis vel nisi sit amet laoreet. Mauris sed velit venenatis eros accumsan cursus
-    obj24: Cras non ligula luctus, dignissim ipsum eget, euismod erat. Morbi volutpat mauris ullamcorper purus blandit malesuada
     obj26:  Donec condimentum nisl viverra luctus aliquam
+    obj27: ut mollis arcu pellentesque in
+    obj28:
+      obj281: In a dui ac urna rhoncus tincidunt
+      obj282: Integer id maximus enim, id iaculis nisl.
   obj3:
     obj31:
       obj311:
@@ -28,9 +30,10 @@ en:
 #   [:obj1, :obj13, :obj134],
 #   [:obj1, :obj14],
 #   [:obj2, :obj21],
-#   [:obj2, :obj22],
-#   [:obj2, :obj24],
 #   [:obj2, :obj26],
+#   [:obj2, :obj27],
+#   [:obj2, :obj28, :obj281],
+#   [:obj2, :obj28, :obj282],
 #   [:obj3, :obj31, :obj311, :obj3111],
 #   [:obj3, :obj31, :obj312],
 #   [:obj3, :obj32],
@@ -39,16 +42,21 @@ en:
 #   [:obj5]
 # ]
 
+# diffmap with en
+# [:es, :en] => [
+#   [:obj2, :obj27],
+#   [:obj2, :obj28, :obj281],
+#   [:obj2, :obj28, :obj282]
+# ]
+
+
 # diffmap with fr
-# [:en, :fr] => [
+# [:es, :fr] => [
 #   [:obj1, :obj13, :obj131],
 #   [:obj1, :obj13, :obj132],
 #   [:obj1, :obj13, :obj134],
-#   [:obj1, :obj14]
-# ]
-
-# diffmap wth es
-# [:en, :es] => [
-#   [:obj2, :obj22],
-#   [:obj2, :obj24]
+#   [:obj1, :obj14],
+#   [:obj2, :obj27],
+#   [:obj2, :obj28, :obj281],
+#   [:obj2, :obj28, :obj282]
 # ]

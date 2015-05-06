@@ -3,18 +3,7 @@ require 'pry'
 module LocaleDiff
 
   class Diff
-
-    attr_accessor :output
-
-    SKIP_FILES = %w(. ..)
-
-    # TODO get all of these from initializer
-    LANGUAGES = {
-      en: "English",
-      fr: "Francais"
-    }
-
-    attr_accessor :hashes, :languages, :langmap, :diffmap, :content_map, :files
+    attr_accessor :hashes, :languages, :langmap, :diffmap, :content_map, :files, :output
 
     # when options contains mapped language codes to their respective yml files
     # it loads all languages for the diff into the object and sets up all hashes
@@ -75,6 +64,10 @@ module LocaleDiff
   #
   #
   def print_missing_translations!
+    # TODO: create record and begin adding entries to it
+
+    # TODO: if initializer specifies it, write to output file
+
     File.open("output.txt", 'w') do |f|
       print_contents(f)
     end
