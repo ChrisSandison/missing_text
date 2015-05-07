@@ -1,0 +1,21 @@
+Creating translation file for /Users/chrissandison/Desktop/code/rails_projects/locale_diff/spec/dummy/config/locales/hash3/en.yml, /Users/chrissandison/Desktop/code/rails_projects/locale_diff/spec/dummy/config/locales/hash3/fr.yml
+
+----------------------------------------------------------
+Translations for comparison of en with fr. All entires are missing respective translations in fr
+
+----------------------------------------------------------
+
+
+Translations for comparison of fr with en. All entires are missing respective translations in en
+
+----------------------------------------------------------
+dans la composition d’une sauce (obj1.obj11)
+
+entrent en général un liquide (obj1.obj12)
+
+De nombreuses sauces sont basées sur le roux, (obj1.obj13.obj133.obj1331)
+
+Les sauces remontent à l’époque médiévale. (obj1.obj15)
+
+
+

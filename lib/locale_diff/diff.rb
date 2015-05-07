@@ -3,19 +3,14 @@ require 'pry'
 module LocaleDiff
 
   class Diff
-    attr_accessor :hashes, :languages, :langmap, :diffmap, :content_map, :files, :output
 
-    # when options contains mapped language codes to their respective yml files
-    # it loads all languages for the diff into the object and sets up all hashes
-    # after this is called, call process() in order to begin entire operation
-    # options is a hash such as
-    # {
-    #   en: ...en.yml
-    #   fr: ...fr.yml
-    #   ...
-    # }
-    # for now, it takes a path relative to config/locales/... but this will be upgraded
-    # later to take directories
+    class YamlParsingError < StandardError
+    end
+
+    class RbParsingError < StandardError
+    end
+
+    attr_accessor :hashes, :languages, :langmap, :diffmap, :content_map, :files, :output, :parent_dir
 
     def setup!
       self.hashes = {}
@@ -27,31 +22,37 @@ module LocaleDiff
 
     alias_method :clear!, :setup!
 
-    def initialize(options = {})
+    def initialize(options = [])
       setup!
-      options.each do |lang, yml|
-        languages << lang
-        
-        parsed_yaml = open_yaml(yml)
 
-        # TODO: what if it's not?? Handle this case
-        if parsed_yaml.present?
-          files << yml.gsub(/\.yml/, '')[-2..-1]
-          parsed_yaml.each do |_, body|
+      # save the name of the parent directory that we are operating on
+      self.parent_dir = File.basename(File.expand_path("..", options[0][:path]))
+
+      options.each do |locale_file|
+
+        # store all languages we are examining for this directory and the files we are examining
+        languages << locale_file[:lang].try(:to_sym)
+        files << locale_file[:path]
+        parsed_locale = open_locale_file(locale_file)
+
+        # TODO handle case where nothing is returned!
+        if parsed_locale.present?
+          locale_file[:parsed] = parsed_locale
+          parsed_locale.each do |lang, body|
             hashes[lang] = body
           end
         end
-
       end
     end
 
-     #
+  #
   #
   # Runner
   #
   #
 
   def begin!(options = {})
+    binding.pry
     create_langmap!
     create_diffmap!
     print_missing_translations!
@@ -185,13 +186,31 @@ module LocaleDiff
 
   private
 
+    def open_locale_file(file)
+      if file[:type] == ".yml"
+        open_yaml(file[:path])
+      elsif file[:type] == ".rb"
+        open_rb(file[:path])
+      else
+        raise LocaleDiff::FiletypeError(file), "Unable to open #{file} for parsing. Pleasure ensure file is .yml or .rb"
+      end
+    end
+
     def open_yaml(yml)
       begin
-        # TODO: read in locale as .rb files?
-        file = symbolize_keys_nested!(YAML.load_file("#{LocaleDiff.app_root}/#{LocaleDiff.locale_root}#{yml}"))
+        file = symbolize_keys_nested!(YAML.load_file(yml))
         return file
       rescue => error
-        raise "Error parsing YAML: #{error}"
+        raise YamlParsingError.new(yml), "Unable to parse YAML. Please verify it #{yml}"
+      end
+    end
+
+    def open_rb(rb)
+      begin
+        file = symbolize_keys_nested!(eval(File.read(rb)))
+        return file
+      rescue => error
+        raise RbParsingError.new(rb), "Unable to parse .rb. Please verify #{rb}"
       end
     end
 
