@@ -31,7 +31,7 @@ module LocaleDiff
 
         # store all languages we are examining for this directory and the files we are examining
         languages << locale_file[:lang].try(:to_sym)
-        files << locale_file[:path]
+        files << locale_file
         parsed_locale = open_locale_file(locale_file)
         # TODO handle case where nothing is returned!
         if parsed_locale.present?
@@ -75,6 +75,7 @@ module LocaleDiff
   end
 
   def print_contents(file)
+    # TODO files has changed
     file.puts("Creating translation file for #{self.files.join(", ")}\n\n")
     file.puts("----------------------------------------------------------")
     diffmap.each do |translation, map_array|
