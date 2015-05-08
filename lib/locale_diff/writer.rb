@@ -2,12 +2,13 @@ module LocaleDiff
 
   class Writer
 
-    attr_accessor :languages, :langmap, :diffmap, :files, :hashes, :parent_dir
+    attr_accessor :languages, :langmap, :diffmap, :files, :hashes, :parent_dir, :batch_id
 
     def initialize(options = {})
       options.each do |key, value|
         self.send("#{key}=", value)
       end
+      self.batch_id = LocaleDiff::Batch.last.id
     end
 
     def write
@@ -18,7 +19,8 @@ module LocaleDiff
     def write_record
       record = Record.create(
         parent_dir: self.parent_dir,
-        files: self.files
+        files: self.files,
+        locale_diff_batch_id: self.batch_id
         )
       record
     end

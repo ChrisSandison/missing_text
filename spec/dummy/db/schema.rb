@@ -11,7 +11,12 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150508182305) do
+ActiveRecord::Schema.define(version: 20150508204224) do
+
+  create_table "locale_diff_batches", force: true do |t|
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
 
   create_table "locale_diff_entries", force: true do |t|
     t.integer  "locale_diff_records_id"
@@ -28,6 +33,9 @@ ActiveRecord::Schema.define(version: 20150508182305) do
     t.text     "files"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.integer  "locale_diff_batch_id"
   end
+
+  add_index "locale_diff_records", ["locale_diff_batch_id"], name: "index_locale_diff_records_on_locale_diff_batch_id"
 
 end

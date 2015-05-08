@@ -5,6 +5,9 @@ module LocaleDiff
     end
 
     def self.run
+      # create a Batch entry that the record can reference in order to group this session
+      LocaleDiff::Batch.create
+
       # start at the root folder and begin performing the diff operation on all inner locale directories
 
       Dir.glob("#{LocaleDiff.app_root}/#{LocaleDiff.locale_root}*").select{ |file| File.directory?(file)}.each do |directory|
