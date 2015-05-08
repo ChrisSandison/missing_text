@@ -7,19 +7,29 @@ module LocaleDiff
     def self.run
       # start at the root folder and begin performing the diff operation on all inner locale directories
 
-      Dir.glob("#{LocaleDiff.app_root}/#{LocaleDiff.locale_root}*").select{ |file| File.directory?(file)}.each do |directory|
+      # Dir.glob("#{LocaleDiff.app_root}/#{LocaleDiff.locale_root}*").select{ |file| File.directory?(file)}.each do |directory|
         
-        unless self.skip_directories.include?(directory)
-          # Get a set of locale files and begin performing the diff operation on them
-          locale_files = Dir.glob("#{directory}/*")
+      #   unless self.skip_directories.include?(directory)
+      #     # Get a set of locale files and begin performing the diff operation on them
+      #     locale_files = Dir.glob("#{directory}/*")
          
-          # set up the file arguments to be passed into the diff engine
-          diff_files = self.get_file_info(locale_files)
-          LocaleDiff::Diff.new(diff_files).begin!
-        end
-      end
+      #     # set up the file arguments to be passed into the diff engine
+      #     diff_files = self.get_file_info(locale_files)
+      #     LocaleDiff::Diff.new(diff_files).begin!
+      #   end
+      # end
 
-      # TODO Also perform this operation for any locale files directly inside of the locale directory
+      # Also perform this operation for any locale files directly inside of the locale directory
+
+      if LocaleDiff.search_direct_locale
+
+        direct_locale_files = get_file_info(
+          Dir.glob("#{LocaleDiff.app_root}/#{LocaleDiff.locale_root}*.yml") + 
+          Dir.glob("#{LocaleDiff.app_root}/#{LocaleDiff.locale_root}*.rb")
+          )
+
+        LocaleDiff::Diff.new(direct_locale_files).begin!
+      end
     end
 
     private

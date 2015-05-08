@@ -10,13 +10,12 @@ module LocaleDiff
     class RbParsingError < StandardError
     end
 
-    attr_accessor :hashes, :languages, :langmap, :diffmap, :content_map, :files, :output, :parent_dir
+    attr_accessor :hashes, :languages, :langmap, :diffmap, :files, :output, :parent_dir
 
     def setup!
       self.hashes = {}
       self.languages = []
       self.diffmap = {}
-      self.content_map = {}
       self.files = []
     end
 
@@ -26,7 +25,7 @@ module LocaleDiff
       setup!
 
       # save the name of the parent directory that we are operating on
-      self.parent_dir = File.basename(File.expand_path("..", options[0][:path]))
+      self.parent_dir = File.basename(File.expand_path("..", options[0][:path])) 
 
       options.each do |locale_file|
 
@@ -34,7 +33,6 @@ module LocaleDiff
         languages << locale_file[:lang].try(:to_sym)
         files << locale_file[:path]
         parsed_locale = open_locale_file(locale_file)
-
         # TODO handle case where nothing is returned!
         if parsed_locale.present?
           locale_file[:parsed] = parsed_locale
@@ -52,7 +50,6 @@ module LocaleDiff
   #
 
   def begin!(options = {})
-    binding.pry
     create_langmap!
     create_diffmap!
     print_missing_translations!
@@ -65,6 +62,9 @@ module LocaleDiff
   #
   #
   def print_missing_translations!
+    # if there is nothing to detect, then just return
+    return unless self.diffmap.present?
+    
     # TODO: create record and begin adding entries to it
 
     # TODO: if initializer specifies it, write to output file
@@ -208,7 +208,7 @@ module LocaleDiff
     def open_rb(rb)
       begin
         file = symbolize_keys_nested!(eval(File.read(rb)))
-        return file
+        return {languages.last => file}
       rescue => error
         raise RbParsingError.new(rb), "Unable to parse .rb. Please verify #{rb}"
       end

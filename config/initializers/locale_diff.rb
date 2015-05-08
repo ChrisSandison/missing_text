@@ -11,3 +11,6 @@ LocaleDiff.output_file_path = ""
 
 # Include any directories in locales/ that you would like to skip. By default this will be appended to "." and ".."
 LocaleDiff.skip_directories = []
+
+# Include the search of the locale root itself (e.g. config/locales) when looking for missing translations. This is true by default.
+LocaleDiff.search_direct_locale = true
