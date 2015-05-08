@@ -3,7 +3,6 @@ module LocaleDiff
     has_many :locale_diff_entries
 
 
-    serialize :files, Hash
-    serialize :languages, Array
+    serialize :files, Array
   end
 end

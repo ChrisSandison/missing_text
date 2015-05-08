@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150508171637) do
+ActiveRecord::Schema.define(version: 20150508182305) do
 
   create_table "locale_diff_entries", force: true do |t|
     t.integer  "locale_diff_records_id"
@@ -20,12 +20,12 @@ ActiveRecord::Schema.define(version: 20150508171637) do
     t.text     "target_languages"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.string   "locale_code"
   end
 
   create_table "locale_diff_records", force: true do |t|
     t.string   "parent_dir"
     t.text     "files"
-    t.text     "languages"
     t.datetime "created_at"
     t.datetime "updated_at"
   end
