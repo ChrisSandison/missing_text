@@ -1,3 +1,9 @@
+require 'bootstrap-sass'
+require 'haml'
+require 'font-awesome-rails'
+require 'jquery-rails'
+require 'jquery-ui-rails'
+
 module LocaleDiff
   class Engine < ::Rails::Engine
     isolate_namespace LocaleDiff

@@ -3,5 +3,6 @@ module LocaleDiff
     belongs_to :locale_diff_record
 
     serialize :target_languages, Array
+
   end
 end

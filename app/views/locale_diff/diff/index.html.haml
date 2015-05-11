@@ -1,0 +1,31 @@
+.jumbotron
+  %h1.text-center Missing Text
+.container
+  - if @batch.ask_for_refresh?
+    .row.controls
+      - #TODO: localize the strftime in locale files of our own
+      = link_to "Refresh", refresh_path, class: "btn btn-md btn-primary"
+      = select_tag "History", options_for_select(LocaleDiff::Batch.history_options(@batch).collect{ |batch| [batch.created_at.strftime('%b %e, %Y at %k:%m:%S'), batch.id]}), id: 'history_select'
+      = link_to "Go", '#', class: "btn btn-md", id: "go_button"
+      = link_to "Clear History", '#', class: "btn btn-md", id: 'clear_history'
+  .row
+    %h3.text-center= "Showing taken on #{@batch.created_at.strftime('%b %e, %Y at %k:%m:%S')}"
+    - @records.each do |record|
+      %p
+        In 
+        %code= "#{File.expand_path('..', record.files.first[:path])}"
+        the following entries are missing:
+
+      - record.entries.each do |entry|
+        %p
+          The 
+          %code= "#{entry.base_language}" 
+          entry
+          %code= "#{entry.locale_code}:"
+          %blockquote= entry.base_string
+          Is missing from the files:
+          %code= "#{entry.target_languages.join(', ')}"
+
+
+
+
