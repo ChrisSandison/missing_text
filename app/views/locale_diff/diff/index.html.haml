@@ -6,7 +6,7 @@
       .controls
         .col-md-offset-3.col-md-2.running-actions
           = link_to "Re-Run Missing Text", refresh_path, class: "btn btn-md btn-primary"
-        .col-md-2
+        .col-md-2.running-actions
           .dropdown
             %a{id: "dLabel", href: '#', role: "button", :"data-target" => '#', :"data-toggle" => "dropdown", :"aria-haspopup" => "true", role: "button", :"aria-expanded" => "false", class: "btn btn-md btn-info"}
               See translations on...
@@ -15,11 +15,13 @@
               - LocaleDiff::Batch.history_options(@batch).each do |batch|
                 %li
                   %a{href: '#TODO'}= "#{batch.created_at.strftime('%b %e, %Y at %k:%m:%S')}"
-        .col-md-2
+        .col-md-2.running-actions
           = link_to "Clear History", '#', class: "btn btn-md", id: 'clear_history'
   
   .row
-    %h3.text-center= "Showing taken on #{@batch.created_at.strftime('%b %e, %Y at %k:%m:%S')}"
+    .text-center
+      %h3.title-text= "Missing text last run on #{@batch.created_at.strftime('%b %e, %Y at %k:%m:%S')}:"
+      .collapse-note Click on panel headers to collapse sections
     - @records.each do |record|
       .panel-group{id: "accordian", role: "tablist", :"aria-multiselectable" => "true"}
         .panel.panel-default
@@ -31,15 +33,26 @@
                 the following entries are missing:
           .panel-collapse.collapse.in{id: "collapse_record#{record.id}", role: "tabpanel", :"aria-labelledby" => "record_#{record.id}"}
             .panel-body
-              - record.entries.each do |entry|
-                %p
-                  The 
-                  %code= "#{entry.base_language}" 
-                  entry
-                  %code= "#{entry.locale_code}:"
-                  %blockquote= entry.base_string
-                  Is missing from the files:
-                  %code= "#{entry.target_languages.join(', ')}"
+              - record.entries.group_by(&:base_language).each do |base_language, entries|
+                %h4
+                  Missing 
+                  %code= "#{base_language}"
+                  entries
 
-
+                %table.table-striped
+                  %thead
+                    %tr
+                      %th Key
+                      %th Missing from
+                      %th
+                        Text in
+                        %code #{base_language}
+                  %tbody
+                    - entries.each do |entry|
+                      %tr
+                        %th
+                          %code= "#{entry.locale_code}"
+                        %td
+                          %code= "#{entry.target_languages.join(', ')}"
+                        %td= "#{entry.base_string}"
 

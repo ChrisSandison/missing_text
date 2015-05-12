@@ -1,3 +1,54 @@
+h1 {
+  font-weight: 200;
+  color: #3D4C5C;
+}
+
+.jumbotron {
+  background-color: #96BBE0;
+}
+
+.btn-info, .btn-info:hover, .btn-info:focus {
+  background-color: #B68900;
+  border-color: #B68900;
+}
+
+.btn-primary, .btn-primary:hover, .btn-primary:focus {
+  background-color: #5C728A;
+  border-color: #5C728A;
+}
+
 .running-actions {
   text-align: center;
+  margin-top: 10px;
+  margin-bottom: 10px;
+}
+
+th, td {
+  padding: 8px;
+}
+
+th {
+  font-weight: 270;
+}
+
+.title-text {
+  font-weight: 200;
+  margin-top: 30px;
+}
+
+.collapse-note {
+  font-weight: 150;
+  font-size: 0.85em;
+  font-style: italic;
+  margin-bottom: 40px;
+}
+
+table {
+  margin-bottom: 20px;
+  margin-top: 10px;
+  width: 100%;
+}
+
+a:hover, a:visited, a:link {
+  text-decoration: none;
 }
