@@ -5,7 +5,7 @@
     .row
       .controls
         .col-md-offset-3.col-md-2.running-actions
-          = link_to "Re-Run Missing Text", refresh_path, class: "btn btn-md btn-primary"
+          = link_to "Re-Run Missing Text", rerun_path, class: "btn btn-md btn-primary"
         .col-md-2.running-actions
           .dropdown
             %a{id: "dLabel", href: '#', role: "button", :"data-target" => '#', :"data-toggle" => "dropdown", :"aria-haspopup" => "true", role: "button", :"aria-expanded" => "false", class: "btn btn-md btn-info"}
@@ -14,7 +14,7 @@
             %ul{class: "dropdown-menu", role: "menu", :"aria-labelledby" => "dLabel"}
               - LocaleDiff::Batch.history_options(@batch).each do |batch|
                 %li
-                  %a{href: '#TODO'}= "#{batch.created_at.strftime('%b %e, %Y at %k:%m:%S')}"
+                  %a{href: root_path(id: batch.id)}= "#{batch.created_at.strftime('%b %e, %Y at %k:%m:%S')}"
         .col-md-2.running-actions
           = link_to "Clear History", '#', class: "btn btn-md", id: 'clear_history'
   

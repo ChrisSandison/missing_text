@@ -1,4 +1,4 @@
 Rails.application.routes.draw do
 
-  mount LocaleDiff::Engine => "/locale_diff"
+  mount LocaleDiff::Engine => "/missing_text"
 end
