@@ -1,33 +1,34 @@
 require_dependency "locale_diff/application_controller"
+require_dependency "locale_diff/runner"
 
 module LocaleDiff
   class DiffController < ApplicationController
-    require 'locale_diff/runner'
 
     # TODO only load this page in development/with user login
-
-    # TODO: Have INDEX check if a record is loaded. If it is, display it along with a button to refresh the diffs. Otherwise, indicate that there is no diff on record and advise the user to click the button
-
     def index
 
-      binding.pry
-      if params[:id].present?
-        @batch = LocaleDiff::Batch.find_by_id(params[:id])
-      else
+      @batch = LocaleDiff::Batch.try(:find_by_id, params[:id])
+
+      unless @batch.present?
         @batch = LocaleDiff::Batch.last
       end
 
-      # TODO: flash error if can not find batch, use batch.last otherwise
-      @records = LocaleDiff::Record.where(locale_diff_batch_id: @batch.id)
-      @entries = LocaleDiff::Entry.where("locale_diff_records_id in (?)", @records.pluck(:id))
+      if @batch.present?
+        @records = LocaleDiff::Record.where(locale_diff_batch_id: @batch.id)
+        @entries = LocaleDiff::Entry.where("locale_diff_records_id in (?)", @records.pluck(:id))
+      end
     end
 
-    def refresh
-      Runner.run
+    def rerun
+      LocaleDiff::Runner.run
+      redirect_to root_path
     end
 
     def clear_history
-      # TODO
+      LocaleDiff::Batch.destroy_all
+      LocaleDiff::Record.destroy_all
+      LocaleDiff::Entry.destroy_all
+      redirect_to root_path
     end
     
   end
