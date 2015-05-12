@@ -2,30 +2,44 @@
   %h1.text-center Missing Text
 .container
   - if @batch.ask_for_refresh?
-    .row.controls
-      - #TODO: localize the strftime in locale files of our own
-      = link_to "Refresh", refresh_path, class: "btn btn-md btn-primary"
-      = select_tag "History", options_for_select(LocaleDiff::Batch.history_options(@batch).collect{ |batch| [batch.created_at.strftime('%b %e, %Y at %k:%m:%S'), batch.id]}), id: 'history_select'
-      = link_to "Go", '#', class: "btn btn-md", id: "go_button"
-      = link_to "Clear History", '#', class: "btn btn-md", id: 'clear_history'
+    .row
+      .controls
+        .col-md-offset-3.col-md-2.running-actions
+          = link_to "Re-Run Missing Text", refresh_path, class: "btn btn-md btn-primary"
+        .col-md-2
+          .dropdown
+            %a{id: "dLabel", href: '#', role: "button", :"data-target" => '#', :"data-toggle" => "dropdown", :"aria-haspopup" => "true", role: "button", :"aria-expanded" => "false", class: "btn btn-md btn-info"}
+              See translations on...
+              %span{class: "caret"}
+            %ul{class: "dropdown-menu", role: "menu", :"aria-labelledby" => "dLabel"}
+              - LocaleDiff::Batch.history_options(@batch).each do |batch|
+                %li
+                  %a{href: '#TODO'}= "#{batch.created_at.strftime('%b %e, %Y at %k:%m:%S')}"
+        .col-md-2
+          = link_to "Clear History", '#', class: "btn btn-md", id: 'clear_history'
+  
   .row
     %h3.text-center= "Showing taken on #{@batch.created_at.strftime('%b %e, %Y at %k:%m:%S')}"
     - @records.each do |record|
-      %p
-        In 
-        %code= "#{File.expand_path('..', record.files.first[:path])}"
-        the following entries are missing:
-
-      - record.entries.each do |entry|
-        %p
-          The 
-          %code= "#{entry.base_language}" 
-          entry
-          %code= "#{entry.locale_code}:"
-          %blockquote= entry.base_string
-          Is missing from the files:
-          %code= "#{entry.target_languages.join(', ')}"
-
+      .panel-group{id: "accordian", role: "tablist", :"aria-multiselectable" => "true"}
+        .panel.panel-default
+          .panel-heading{role: "tab", id: "record_#{record.id}_heading"}
+            %h4.panel-title
+              %a{:"data-toggle" => "collapse", :"data-parent" => "accordion", href: "#collapse_record#{record.id}", :"aria-expanded" => "true", :"aria-controls" => "#collapse_record#{record.id}"}
+                In 
+                %code= "#{File.expand_path('..', record.files.first[:path])}"
+                the following entries are missing:
+          .panel-collapse.collapse.in{id: "collapse_record#{record.id}", role: "tabpanel", :"aria-labelledby" => "record_#{record.id}"}
+            .panel-body
+              - record.entries.each do |entry|
+                %p
+                  The 
+                  %code= "#{entry.base_language}" 
+                  entry
+                  %code= "#{entry.locale_code}:"
+                  %blockquote= entry.base_string
+                  Is missing from the files:
+                  %code= "#{entry.target_languages.join(', ')}"
 
 
 
