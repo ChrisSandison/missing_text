@@ -1,8 +1,6 @@
 module LocaleDiff
   class Runner
 
-    attr_accessor :diff
-
     class FiletypeError < StandardError
     end
 
@@ -14,14 +12,18 @@ module LocaleDiff
 
       Dir.glob("#{LocaleDiff.app_root}/#{LocaleDiff.locale_root}*").select{ |file| File.directory?(file)}.each do |directory|
         
-        unless self.skip_directories.include?(directory)
+        unless self.skip_directories.include?(File.basename(directory))
           # Get a set of locale files and begin performing the diff operation on them
           locale_files = Dir.glob("#{directory}/*")
          
           # set up the file arguments to be passed into the diff engine
-          diff_files = self.get_file_info(locale_files)
-          self.diff = LocaleDiff::Diff.new(diff_files)
-          self.diff.begin!
+          begin
+            diff_files = self.get_file_info(locale_files)
+          rescue FiletypeError => e
+            raise e
+          end
+
+          LocaleDiff::Diff.new(diff_files).begin!
         end
       end
 
@@ -34,8 +36,7 @@ module LocaleDiff
           Dir.glob("#{LocaleDiff.app_root}/#{LocaleDiff.locale_root}*.rb")
           )
 
-        self.diff = LocaleDiff::Diff.new(direct_locale_files)
-        self.diff.begin!
+        LocaleDiff::Diff.new(direct_locale_files).begin!
       end
     end
 
@@ -54,7 +55,7 @@ module LocaleDiff
         locale_files.each do |file|
           # ensure a good filetype before we go reading this in
           unless accepted_formats.include?(File.extname(file))
-            raise FiletypeError(file, "Locale file is not one of the accepted formats. Pleasure ensure you are using .rb or .yml to store your locales.")
+            raise FiletypeError.new(file), "Locale file is not one of the accepted formats. Pleasure ensure you are using .rb or .yml to store your locales."
           end
 
           # otherwise get all of the information

@@ -1,5 +1,4 @@
 require 'pry'
-require 'locale_diff/writer'
 
 module LocaleDiff
 
@@ -161,11 +160,23 @@ module LocaleDiff
 
     def open_locale_file(file)
       if file[:type] == ".yml"
-        open_yaml(file[:path])
+
+        begin
+          open_yaml(file[:path])
+        rescue YamlParsingError => e
+          raise e
+        end
+
       elsif file[:type] == ".rb"
-        open_rb(file[:path])
+
+        begin
+          open_rb(file[:path])
+        rescue RbParsingError => e
+          raise e
+        end
+        
       else
-        raise LocaleDiff::FiletypeError(file), "Unable to open #{file} for parsing. Pleasure ensure file is .yml or .rb"
+        raise LocaleDiff::FiletypeError.new(file), "Unable to open #{file} for parsing. Pleasure ensure file is .yml or .rb"
       end
     end
 
