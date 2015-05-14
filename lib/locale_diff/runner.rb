@@ -1,6 +1,8 @@
 module LocaleDiff
   class Runner
 
+    attr_accessor :diff
+
     class FiletypeError < StandardError
     end
 
@@ -18,7 +20,8 @@ module LocaleDiff
          
           # set up the file arguments to be passed into the diff engine
           diff_files = self.get_file_info(locale_files)
-          LocaleDiff::Diff.new(diff_files).begin!
+          self.diff = LocaleDiff::Diff.new(diff_files)
+          self.diff.begin!
         end
       end
 
@@ -31,7 +34,8 @@ module LocaleDiff
           Dir.glob("#{LocaleDiff.app_root}/#{LocaleDiff.locale_root}*.rb")
           )
 
-        LocaleDiff::Diff.new(direct_locale_files).begin!
+        self.diff = LocaleDiff::Diff.new(direct_locale_files)
+        self.diff.begin!
       end
     end
 

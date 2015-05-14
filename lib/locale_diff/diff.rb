@@ -11,7 +11,7 @@ module LocaleDiff
     class RbParsingError < StandardError
     end
 
-    attr_accessor :hashes, :languages, :langmap, :diffmap, :files, :parent_dir
+    attr_accessor :hashes, :languages, :langmap, :diffmap, :files, :parent_dir, :writer
 
     def setup!
       self.hashes = {}
@@ -65,8 +65,7 @@ module LocaleDiff
     # if there is nothing to detect, then just return
     return unless self.diffmap.present?
     
-    # TODO: create record and begin adding entries to it
-    writer = LocaleDiff::Writer.new({
+    self.writer = LocaleDiff::Writer.new({
       languages: self.languages,
       diffmap: self.diffmap,
       langmap: self.langmap,
@@ -74,27 +73,8 @@ module LocaleDiff
       hashes: self.hashes,
       parent_dir: self.parent_dir
       })
-    writer.write
-
-    # TODO: if initializer specifies it, write to output file
-    # File.open("output.txt", 'w') do |f|
-    #   print_contents(f)
-    # end
+    self.writer.write
   end
-
-  # def print_contents(file)
-  #   # TODO files has changed
-  #   file.puts("Creating translation file for #{self.files.join(", ")}\n\n")
-  #   file.puts("----------------------------------------------------------")
-  #   diffmap.each do |translation, map_array|
-  #     file.puts("Translations for comparison of #{translation[0]} with #{translation[1]}. All entires are missing respective translations in #{translation[1]}\n\n")
-  #     file.puts("----------------------------------------------------------")
-  #     map_array.each do |entry|
-  #       file.puts("#{get_entry_for(entry, translation[0])} (#{entry.join(".")})\n\n")
-  #     end
-  #     file.puts("\n\n")
-  #   end
-  # end
 
   #
   #

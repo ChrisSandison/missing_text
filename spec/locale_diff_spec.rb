@@ -30,6 +30,15 @@ describe LocaleDiff::Diff do
       expect{ LocaleDiff::Diff.new(@args) }.to raise_error(LocaleDiff::Diff::RbParsingError)
     end
 
+    it "should save the files that are opened and remember the parent directory" do
+      @diff = LocaleDiff::Diff.new(@args)
+      expect(@diff.files).to eq(
+        [
+          {:lang=>"en", :type=>".yml", :path=>"#{file_path}hash1/en.yml"},
+          {:lang=>"fr", :type=>".yml", :path=>"#{file_path}hash1/fr.yml"}]
+        )
+      expect(@diff.parent_dir).to eq("hash1")
+    end
   end
 
   context :symbolize_keys_nested do
@@ -163,8 +172,67 @@ describe LocaleDiff::Diff do
       expect(@diff.diffmap[[:es, :fr]]).to match_array([[:obj1, :obj13, :obj131], [:obj1, :obj13, :obj132], [:obj1, :obj13, :obj134], [:obj1, :obj14], [:obj2, :obj27], [:obj2, :obj28, :obj281], [:obj2, :obj28, :obj282]])
     end
   end
+
+  context :writer do
+    it "should create the writer with all the info from diff.rb" do
+      LocaleDiff::Batch.create
+      @diff = LocaleDiff::Diff.new(@args)
+      @diff.begin!
+      # sanity check to make sure writer is being created
+
+      @writer = @diff.writer
+
+      expect(@writer.diffmap).to eq(@diff.diffmap)
+      expect(LocaleDiff::Record.count).to eq(1)
+      expect(LocaleDiff::Entry.count).to eq(2)
+
+      @record = LocaleDiff::Record.first
+      @entry1 = LocaleDiff::Entry.first
+      @entry2 = LocaleDiff::Entry.last
+
+      expect(@record.parent_dir).to eq(@diff.parent_dir)
+      expect(@record.files).to eq(@diff.files)
+      expect(@record.locale_diff_batch_id).to eq(LocaleDiff::Batch.last.id)
+
+      tests = [
+        [@record, [
+          [:parent_dir, @diff.parent_dir],
+          [:files, @diff.files],
+          [:locale_diff_batch_id, LocaleDiff::Batch.last.id]
+        ]],
+
+        [@entry1, [
+          [:locale_diff_records_id, @record.id],
+          [:base_language, "en"],
+          [:base_string, "made often from the juices that run naturally from meat or vegetables during cooking"],
+          [:target_languages, [:fr]],
+          [:locale_code, "obj2"]
+        ]],
+
+        [@entry2, [
+          [:locale_diff_records_id, @record.id],
+          [:base_language, "en"],
+          [:base_string, "the term can refer to a wider variety of sauces"],
+          [:target_languages, [:fr]],
+          [:locale_code, "obj3.obj32"]
+        ]]
+      ]
+      
+      tests.each do |record, test_values|
+        test_values.each do |test_case|
+          expect_value(record, test_case[0], test_case[1])
+        end
+      end
+
+    end
+  end
+
 end
 
 def file_path
   "#{LocaleDiff.app_root}/#{LocaleDiff.locale_root}"
+end
+
+def expect_value(entry, attribute, value)
+  expect(entry.send(attribute)).to eq(value)
 end
