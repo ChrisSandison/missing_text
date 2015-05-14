@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    locale_diff (0.0.1)
+    missing_text (0.0.1)
       activesupport
       bootstrap-sass (~> 3.3.4)
       coffee-rails (~> 4.0)
@@ -200,7 +200,7 @@ DEPENDENCIES
   cucumber
   factory_girl_rails
   html2haml
-  locale_diff!
+  missing_text!
   pry-nav
   rspec-rails
   sqlite3

@@ -1,5 +1,5 @@
 class RemoveLanguagesFromRecords < ActiveRecord::Migration
   def change
-    remove_column :locale_diff_records, :languages
+    remove_column :missing_text_records, :languages
   end
 end

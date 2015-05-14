@@ -13,13 +13,13 @@
 
 ActiveRecord::Schema.define(version: 20150508204224) do
 
-  create_table "locale_diff_batches", force: true do |t|
+  create_table "missing_text_batches", force: true do |t|
     t.datetime "created_at"
     t.datetime "updated_at"
   end
 
-  create_table "locale_diff_entries", force: true do |t|
-    t.integer  "locale_diff_records_id"
+  create_table "missing_text_entries", force: true do |t|
+    t.integer  "missing_text_records_id"
     t.string   "base_language"
     t.string   "base_string"
     t.text     "target_languages"
@@ -28,14 +28,14 @@ ActiveRecord::Schema.define(version: 20150508204224) do
     t.string   "locale_code"
   end
 
-  create_table "locale_diff_records", force: true do |t|
+  create_table "missing_text_records", force: true do |t|
     t.string   "parent_dir"
     t.text     "files"
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.integer  "locale_diff_batch_id"
+    t.integer  "missing_text_batch_id"
   end
 
-  add_index "locale_diff_records", ["locale_diff_batch_id"], name: "index_locale_diff_records_on_locale_diff_batch_id"
+  add_index "missing_text_records", ["missing_text_batch_id"], name: "index_missing_text_records_on_missing_text_batch_id"
 
 end

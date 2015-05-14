@@ -1,4 +1,4 @@
-LocaleDiff::Engine.routes.draw do
+MissingText::Engine.routes.draw do
   root to: 'diff#index'
   get '/rerun', to: 'diff#rerun'
   get '/clear_history', to: 'diff#clear_history'
