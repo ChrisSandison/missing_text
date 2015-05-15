@@ -19,7 +19,6 @@ Gem::Specification.new do |s|
 
   s.add_dependency "rails", "~> 4.1.10"
   s.add_dependency "activesupport"
-  s.add_dependency "thor"
   s.add_dependency 'coffee-rails', '~> 4.0'
   s.add_dependency 'font-awesome-rails', ['>= 3.0', '< 5']
   s.add_dependency 'haml', '~> 4.0'
@@ -31,7 +30,6 @@ Gem::Specification.new do |s|
   s.add_development_dependency "sqlite3"
   s.add_development_dependency "pry-nav"
   s.add_development_dependency "cucumber"
-  s.add_development_dependency "aruba"
   s.add_development_dependency 'rspec-rails'
   s.add_development_dependency 'capybara'
   s.add_development_dependency 'factory_girl_rails'
