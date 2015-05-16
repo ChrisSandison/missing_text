@@ -9,8 +9,6 @@
 
         %p.welcome
           = "Please visit the Missing Text github for full configuration options."
-
-        = link_to "Missing Text on Github", "https://github.com/ChrisSandison/missing_text", class: "btn btn-lg btn-primary"
     .row
       .text-center
         = link_to "Run Missing Text", rerun_path, class: "btn btn-lg btn-primary"
@@ -52,7 +50,7 @@
 
                 .modal-footer
                   %button{class: "btn btn-default", data: {dismiss: "modal"}} Cancel
-                  = link_to "Clear History", clear_history_path, class: "btn btn-danger clear-btn-modal"
+                  = link_to "Clear History", clear_history_path, class: "btn btn-danger", id: "clear-btn-modal"
   
     .row
       .text-center

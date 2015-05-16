@@ -9,9 +9,9 @@ Gem::Specification.new do |s|
   s.version     = MissingText::VERSION
   s.authors     = ["ChrisSandison"]
   s.email       = ["chris.sandison@gmail.com"]
-  s.homepage    = "TODO"
-  s.summary     = "TODO: Summary of MissingText."
-  s.description = "TODO: Description of MissingText."
+  s.homepage    = "https://github.com/ChrisSandison/missing_text"
+  s.summary     = "Detects translations missing in your applications' locale files"
+  s.description = "MissingText is a rails engine for detecting missing translations from your locale files. The web interface allows full visiblity of missing translations by file, allowing you to revisit and clear sessions."
   s.license     = "MIT"
 
   s.files = Dir["{app,config,db,lib}/**/*", "MIT-LICENSE", "Rakefile", "README.rdoc"]
