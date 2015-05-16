@@ -22,7 +22,7 @@
           = link_to "Re-Run Missing Text", rerun_path, class: "btn btn-md btn-primary"
         .col-md-2.running-actions
           .dropdown
-            %a{id: "dLabel", href: '#', role: "button", :"data-target" => '#', :"data-toggle" => "dropdown", :"aria-haspopup" => "true", role: "button", :"aria-expanded" => "false", class: "btn btn-md btn-info"}
+            %a{id: "dLabel", href: '#', role: "button", :"data-target" => '#', :"data-toggle" => "dropdown", :"aria-haspopup" => "true", :"aria-expanded" => "false", class: "btn btn-md btn-info"}
               See translations on...
               %span{class: "caret"}
 
@@ -34,7 +34,7 @@
               - else
                 - batches.each do |batch|
                   %li
-                    %a{href: root_path(id: batch.id)}= "#{batch.created_at.strftime('%b %e, %Y at %k:%m:%S')}"
+                    %a{href: root_path(id: batch.id)}= "#{batch.created_time}"
         .col-md-2.running-actions
           .btn.btn-md.clear-btn{data: {toggle: 'modal', target: '#clear_history_modal'}} Clear History
 
@@ -52,43 +52,44 @@
 
                 .modal-footer
                   %button{class: "btn btn-default", data: {dismiss: "modal"}} Cancel
-                  = link_to "Clear History", clear_history_path, class: "btn btn-danger"
+                  = link_to "Clear History", clear_history_path, class: "btn btn-danger clear-btn-modal"
   
     .row
       .text-center
-        %h3.title-text= "Missing text last run on #{@batch.created_at.strftime('%b %e, %Y at %k:%m:%S')}:"
+        %h3.title-text= "Missing text last run on #{@batch.created_time}:"
         .collapse-note Click on panel headers to collapse sections
       - @records.each do |record|
-        .panel-group{id: "accordian", role: "tablist", :"aria-multiselectable" => "true"}
-          .panel.panel-default
-            .panel-heading{role: "tab", id: "record_#{record.id}_heading"}
-              %h4.panel-title
-                %a{:"data-toggle" => "collapse", :"data-parent" => "accordion", href: "#collapse_record#{record.id}", :"aria-expanded" => "true", :"aria-controls" => "#collapse_record#{record.id}"}
-                  In 
-                  %code= "#{File.expand_path('..', record.files.first[:path])}"
-                  the following entries are missing:
-            .panel-collapse.collapse.in{id: "collapse_record#{record.id}", role: "tabpanel", :"aria-labelledby" => "record_#{record.id}"}
-              .panel-body
-                - record.entries.group_by(&:base_language).each do |base_language, entries|
-                  %h4
-                    Missing 
-                    %code= "#{base_language}"
-                    entries
+        - if record.entries.present?
+          .panel-group{id: "accordian", role: "tablist", :"aria-multiselectable" => "true"}
+            .panel.panel-default
+              .panel-heading{role: "tab", id: "record_#{record.id}_heading"}
+                %h4.panel-title
+                  %a{:"data-toggle" => "collapse", :"data-parent" => "accordion", href: "#collapse_record#{record.id}", :"aria-expanded" => "true", :"aria-controls" => "#collapse_record#{record.id}"}
+                    In 
+                    %code= "#{File.expand_path('..', record.files.first[:path])}"
+                    the following entries are missing:
+              .panel-collapse.collapse.in{id: "collapse_record#{record.id}", role: "tabpanel", :"aria-labelledby" => "record_#{record.id}"}
+                .panel-body
+                  - record.entries.group_by(&:base_language).each do |base_language, entries|
+                    %h4
+                      Missing 
+                      %code= "#{base_language}"
+                      entries
 
-                  %table.table-striped
-                    %thead
-                      %tr
-                        %th Key
-                        %th Missing from
-                        %th
-                          Text in
-                          %code #{base_language}
-                    %tbody
-                      - entries.each do |entry|
+                    %table.table-striped
+                      %thead
                         %tr
+                          %th Key
+                          %th Missing from
                           %th
-                            %code= "#{entry.locale_code}"
-                          %td
-                            %code= "#{entry.target_languages.join(', ')}"
-                          %td= "#{entry.base_string}"
+                            Text in
+                            %code #{base_language}
+                      %tbody
+                        - entries.each do |entry|
+                          %tr
+                            %th
+                              %code= "#{entry.locale_code}"
+                            %td
+                              %code= "#{entry.target_languages.join(', ')}"
+                            %td= "#{entry.base_string}"
 

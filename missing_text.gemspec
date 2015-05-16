@@ -29,13 +29,13 @@ Gem::Specification.new do |s|
 
   s.add_development_dependency "sqlite3"
   s.add_development_dependency "pry-nav"
-  s.add_development_dependency "cucumber"
   s.add_development_dependency 'rspec-rails'
   s.add_development_dependency 'capybara'
   s.add_development_dependency 'factory_girl_rails'
   s.add_development_dependency 'better_errors'
   s.add_development_dependency 'awesome_print'
   s.add_development_dependency "html2haml"
+  s.add_development_dependency "faker"
 end
 
 

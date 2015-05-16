@@ -1,3 +1,4 @@
+require 'missing_text/writer'
 require 'pry'
 
 module MissingText
