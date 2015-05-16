@@ -25,6 +25,8 @@ Next run migrations in order to create the database records
 $ rake missing_text:install:migrations
 ```
 
+Then run `rake db:migrate` to create the tables.
+
 Next we need to create the initializer for MissingText. This will be installed in `config/initializers/missing_text.rb`. This file can be edited to change startup options.
 
 ```
@@ -44,7 +46,7 @@ end
 ## Running MissingText outside of Development?
 ---
 
-**It is strongly recommended that you install MissingText in the development group of your Gemfile, or only direct to address in your routes file if you are in the development environment.**
+**It is strongly recommended that you install MissingText in the development group of your Gemfile, or only direct to address in your routes file if you are in the development environment.** Please keep in mind that if you have a large number of locale files, this operation may take a lot of time. You may not want to tie up your production server in such a way.
 
 _However_, if you wish to have your MissingText accessible outside of development, you can control your access by overriding the controller like so:
 

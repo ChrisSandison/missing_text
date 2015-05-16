@@ -2,15 +2,15 @@ PATH
   remote: .
   specs:
     missing_text (1.0.0)
-      activesupport
-      bootstrap-sass (~> 3.3.4)
-      coffee-rails (~> 4.0)
+      activesupport (>= 4.0.2)
+      bootstrap-sass (~> 3.3, >= 3.1.0)
+      coffee-rails (>= 4.0.1)
       font-awesome-rails (>= 3.0, < 5)
       haml (~> 4.0)
       jquery-rails (>= 3.0, < 5)
       jquery-ui-rails (~> 5.0)
-      rails (~> 4.1.10)
-      sass-rails (>= 3.2)
+      rails (>= 4.1.8)
+      sass-rails (>= 4.0.5)
 
 GEM
   remote: https://rubygems.org/
