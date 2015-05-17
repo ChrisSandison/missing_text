@@ -17,7 +17,11 @@ describe MissingText::Diff do
 
     it "should raise an exception if a yaml file can not be read" do
       @args[0][:path] = 'nohash/en.yml'
-      expect{ MissingText::Diff.new(@args) }.to raise_error(MissingText::Diff::YamlParsingError)
+      MissingText::Diff.new(@args)
+      expect(MissingText::Warning.count).to eq(1)
+      warning = MissingText::Warning.last
+      expect(warning.filename).to eq("nohash/en.yml")
+      expect(warning.warning_type).to eq(MissingText::Warning::YAML_PARSE)
     end
 
     it "should read in a file saved as an .rb" do
@@ -27,7 +31,11 @@ describe MissingText::Diff do
     it "should raise an exception if an rn file can not be read" do
       @args[0][:type] = ".rb"
       @args[0][:path] = 'nohash/en.rb'
-      expect{ MissingText::Diff.new(@args) }.to raise_error(MissingText::Diff::RbParsingError)
+      MissingText::Diff.new(@args)
+      expect(MissingText::Warning.count).to eq(1)
+      warning = MissingText::Warning.last
+      expect(warning.filename).to eq('nohash/en.rb')
+      expect(warning.warning_type).to eq(MissingText::Warning::RB_PARSE)
     end
 
     it "should save the files that are opened and remember the parent directory" do

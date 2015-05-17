@@ -34,7 +34,6 @@ module MissingText
         languages << locale_file[:lang].try(:to_sym)
         files << locale_file
         parsed_locale = open_locale_file(locale_file)
-        # TODO handle case where nothing is returned!
         if parsed_locale.present?
           parsed_locale.each do |lang, body|
             hashes[lang] = body
@@ -161,42 +160,44 @@ module MissingText
 
     def open_locale_file(file)
       if file[:type] == ".yml"
-
-        begin
-          open_yaml(file[:path])
-        rescue YamlParsingError => e
-          raise e
-        end
-
+        parsed_file = open_yaml(file[:path])
       elsif file[:type] == ".rb"
-
-        begin
-          open_rb(file[:path])
-        rescue RbParsingError => e
-          raise e
-        end
-        
+        parsed_file = open_rb(file[:path])
       else
-        raise MissingText::FiletypeError.new(file), "Unable to open #{file} for parsing. Pleasure ensure file is .yml or .rb"
+        MissingText::Warning.create(
+          filename: file[:path],
+          warning_type: MissingText::Warning::FILE_TYPE_ERROR
+          )
+        parsed_file = {}
       end
+      parsed_file
     end
 
     def open_yaml(yml)
       begin
         file = symbolize_keys_nested!(YAML.load_file(yml))
-        return file
       rescue => error
-        raise YamlParsingError.new(yml), "Unable to parse YAML. Please verify it #{yml}"
+        MissingText::Warning.create(
+          filename: yml,
+          warning_type: MissingText::Warning::YAML_PARSE
+        )
+        file = {}
       end
+      file
     end
 
     def open_rb(rb)
       begin
         file = symbolize_keys_nested!(eval(File.read(rb)))
-        return {languages.last => file}
+        file = {languages.last => file}
       rescue => error
-        raise RbParsingError.new(rb), "Unable to parse .rb. Please verify #{rb}"
+        MissingText::Warning.create(
+          filename: rb,
+          warning_type: MissingText::Warning::RB_PARSE
+          )
+        file = {}
       end
+      file
     end
 
   end

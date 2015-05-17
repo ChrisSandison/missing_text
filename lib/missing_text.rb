@@ -3,6 +3,6 @@ require "missing_text/diff"
 
 module MissingText
 
-  mattr_accessor :app_root, :locale_root, :write_to_file, :output_file_path, :skip_directories, :search_direct_locale
+  mattr_accessor :app_root, :locale_root, :skip_directories, :search_direct_locale, :skip_patterns
 
 end

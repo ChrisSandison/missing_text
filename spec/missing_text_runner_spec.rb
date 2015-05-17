@@ -20,6 +20,32 @@ describe MissingText::Runner do
       expect(MissingText::Record.where(parent_dir: "rbs")).to eq([])
     end
 
+    it "should skip specified filename types, as outlined in the initializers" do
+      allow(MissingText).to receive(:skip_patterns).and_return([/en\-US\.yml/])
+
+      File.open("#{MissingText.app_root}/#{MissingText.locale_root}hash1/en-US.yml", "w+") do |f|
+          f.write({"en-US" => {"accounts" => "Hello"}}.to_yaml)
+        end
+
+      MissingText::Runner.run
+
+      record = MissingText::Record.where(parent_dir: "hash1").first
+      all_files = record.files.map{ |file| file[:lang]}
+
+      expect(all_files.include?("en-US")).to eq(false)
+
+      # delete file
+      File.delete("#{MissingText.app_root}/#{MissingText.locale_root}hash1/en-US.yml")
+    end 
+
+    it "should create a warning when the regex matches too strictly" do
+      allow(MissingText).to receive(:skip_patterns).and_return([/.*/])
+
+      MissingText::Runner.run
+
+      expect(MissingText::Warning.where(warning_type: MissingText::Warning::STRICT_REGEX).count).to eq(4)
+    end
+
     it "should search specified root directory in the initializer" do
       MissingText::Runner.run
       expect(MissingText::Record.where(parent_dir: File.basename(MissingText.locale_root)).count).to eq(1)
@@ -31,7 +57,12 @@ describe MissingText::Runner do
         f.write("I'm a textfile")
       end
 
-      expect{ MissingText::Runner.run }.to raise_error(MissingText::Runner::FiletypeError)
+      MissingText::Runner.run
+
+      expect(MissingText::Warning.count).to eq(1)
+      warning = MissingText::Warning.last
+      expect(warning.filename).to eq("#{MissingText.app_root}/#{MissingText.locale_root}hash1/delete_me.txt")
+      expect(warning.warning_type).to eq(MissingText::Warning::FILE_TYPE_ERROR)
 
       # delete file
       File.delete("#{MissingText.app_root}/#{MissingText.locale_root}hash1/delete_me.txt")

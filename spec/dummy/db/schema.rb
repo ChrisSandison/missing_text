@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150508204224) do
+ActiveRecord::Schema.define(version: 20150517155154) do
 
   create_table "missing_text_batches", force: true do |t|
     t.datetime "created_at"
@@ -37,5 +37,12 @@ ActiveRecord::Schema.define(version: 20150508204224) do
   end
 
   add_index "missing_text_records", ["missing_text_batch_id"], name: "index_missing_text_records_on_missing_text_batch_id"
+
+  create_table "missing_text_warnings", force: true do |t|
+    t.string   "filename"
+    t.string   "warning_type"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
 
 end

@@ -6,3 +6,6 @@ MissingText.skip_directories = []
 
 # Include the search of the locale root itself (e.g. config/locales) when looking for missing translations. This is true by default.
 MissingText.search_direct_locale = true
+
+# Include an array of regexes for any filenames (and their extensions) that you would like skipped. For example, if you have both an en.yml and an en-uk.yml then add [/en\-uk\.yml/]
+MissingText.skip_patterns = []
