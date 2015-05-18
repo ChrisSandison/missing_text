@@ -8,6 +8,7 @@ module MissingText
   class Engine < ::Rails::Engine
     isolate_namespace MissingText
 
+    # This will be needed for creating absolute file paths
     initializer "missing_text.load_app_root" do |app|
       MissingText.app_root = app.root
     end

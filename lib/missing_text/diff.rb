@@ -28,12 +28,17 @@ module MissingText
         # store all languages we are examining for this directory and the files we are examining
         
         parsed_locale = open_locale_file(locale_file)
+
+        # if the file was unable to be parsed, it will be skipped. The warning for the file has already been logged, so the operation can continue
         if parsed_locale.present?
+
           languages << locale_file[:lang].try(:to_sym)
           files << locale_file
+
           parsed_locale.each do |lang, body|
             hashes[lang] = body
           end
+
         end
       end
     end
@@ -160,6 +165,7 @@ module MissingText
       elsif file[:type] == ".rb"
         parsed_file = open_rb(file[:path], file[:lang])
       else
+        # Just incase something has slipped through, at least tell the user that it won't be processed.
         MissingText::Warning.create(
           filename: file[:path],
           warning_type: MissingText::Warning::FILE_TYPE_ERROR,
@@ -185,6 +191,7 @@ module MissingText
     end
 
     def open_rb(rb, lang)
+      # It seems like when rb files are parsed, it doesn't keep the parent key. Just in case, we will use the language of the file name as the parent key.
       begin
         file = symbolize_keys_nested!(eval(File.read(rb)))
         file = {lang.to_sym => file}

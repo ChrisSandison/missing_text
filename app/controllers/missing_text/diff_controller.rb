@@ -4,15 +4,17 @@ require_dependency "missing_text/runner"
 module MissingText
   class DiffController < ApplicationController
 
-    # TODO only load this page in development/with user login
     def index
 
+      # if no batch is specified, just load the last batch
+      # this will ensure that we don't get any nil errors
       @batch = MissingText::Batch.try(:find_by_id, params[:id])
 
       unless @batch.present?
         @batch = MissingText::Batch.last
       end
 
+      # only load the diff information if a batch is found
       if @batch.present?
         @records = MissingText::Record.where(missing_text_batch_id: @batch.id)
         @entries = MissingText::Entry.where("missing_text_records_id in (?)", @records.pluck(:id))

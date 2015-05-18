@@ -71,12 +71,14 @@ module MissingText
         diff_files
       end
 
+      # Gets all the locale files in a directory
       def self.get_locale_files(directory)
         locale_files = Dir.glob("#{directory}/*")
         locale_files = self.skip_files(locale_files, directory)
         locale_files
       end
 
+      # Skips any files that match ANY of the regexes in the initializer
       def self.skip_files(files, directory)
         files = files.select{ |file| MissingText.skip_patterns.inject(true) { |result, pattern| result && (pattern !~ File.basename(file)) } }
 

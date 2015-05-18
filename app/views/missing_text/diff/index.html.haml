@@ -1,17 +1,9 @@
 .jumbotron
   %h1.text-center Missing Text
 .container
-  - if @batch.blank?
-    .row
-      .col-md-offset-2.col-md-8
-        %p.welcome
-          = "Thank you for trying Missing Text! When you click the button below, this engine will search for and display any missing translations from your locale files below. These sessions will be versioned, so you will have the ability to navigate them by date, or clear their history."
 
-        %p.welcome
-          = "Please visit the Missing Text github for full configuration options."
-    .row
-      .text-center
-        = link_to "Run Missing Text", rerun_path, class: "btn btn-lg btn-primary run-missing-text-btn"
+  - if @batch.blank?
+    = render partial: 'no_batch'
 
   - else
     .row
@@ -98,8 +90,10 @@
                             %td= "#{entry.base_string}"
 
 :coffeescript
+  # Might take a while to clear history, just display that it's working.
   $('#clear-btn-modal').click ->
     $(this).text("Clearing History. One Moment Please!")
 
+  # Block UI
   $('.run-missing-text-btn').click ->
     waitingDialog.show('Now running! This may take a while if you have a lot of large locale files.')

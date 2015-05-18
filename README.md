@@ -65,6 +65,7 @@ Where you can perform any user authorization or setup if you choose.
 * `MissingText.locale_root` - The directory where all of the locale files live. An additional directory can be specified if your locales are in a location other than the default `config/locales/`. This is a relative path and will be appended to `Rails.root`.
 * `MissingText.skip_directories` - Include any directories in `MissingText.locale_root` that you would like to skip. By default this will be appended to `.` and `..`. Please make these paths relative to your `MissingText.locale_root`. This is an empty array by default.
 * `MissingText.search_direct_locale`- Include the search of the locale root itself (e.g. `config/locales`) when looking for missing translations. This is true by default.
+* `MissingText.skip_patterns` - An array of regexes that specify what kind of files to skip. For example, if you have both an "en.yml" and an "en-UK" yml, but you would not like the diff operation to be performed on these two, you can add [/en\-uk\.yml/]. These kind also be extended to types of filenames.
 
 ## Development and Contribution
 ---

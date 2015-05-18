@@ -4,6 +4,7 @@ module MissingText
     has_many :missing_text_records
     has_many :missing_text_warnings
 
+    # every batch except this one
     def self.history_options(batch)
       MissingText::Batch.where("id != ?", batch.id).order('created_at DESC')
     end

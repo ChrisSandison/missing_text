@@ -46,6 +46,7 @@ module MissingText
 
         end
 
+        # There doesn't seem to be an efficient way to do this in one giant update... if anybody knows of another way please let me know!
         MissingText::Entry.create(entry_map.map do |entry, target_languages|
             {missing_text_records_id: @record.id,
               locale_code: entry.join("."),
@@ -56,6 +57,7 @@ module MissingText
       end
     end
 
+    # Takes in a locale code and returns the string for that language
     def get_entry_for(entry, language)
       if entry.length > 1
         get_entry_for_rec(entry[1..-1], language, hashes[language][entry[0]])
