@@ -19,6 +19,12 @@ module MissingText
       g.assets false
       g.helper false
     end
+
+    config.to_prepare do
+      Dir.glob(Rails.root + "app/controllers/**/*_controller*.rb").each do |c|
+        require_dependency(c)
+      end
+    end
     
   end
 end
