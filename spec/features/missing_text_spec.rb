@@ -65,4 +65,19 @@ feature 'MissingText' do
     expect(MissingText::Batch.count).to eq(0)
     expect(page).to have_content("Thank you for trying Missing Text! When you click the button below, this engine will search for and display any missing translations from your locale files below. These sessions will be versioned, so you will have the ability to navigate them by date, or clear their history.")
   end
+
+  scenario 'User sees strict regex warning' do
+    allow(MissingText).to receive(:skip_patterns).and_return([/.*/])
+    visit '/missing_text'
+    click_link("Run Missing Text")
+
+    expect(page).to have_content("No files for parsing")
+  end
+
+  scenario 'User sees yml warning' do
+    visit '/missing_text'
+    click_link("Run Missing Text")
+
+    expect(page).to have_content("Unable to open #{MissingText.app_root}/#{MissingText.locale_root}hash1/garbage.yml as a .yml file. Please ensure that your file is valid and the extension matches the type.")
+  end
 end

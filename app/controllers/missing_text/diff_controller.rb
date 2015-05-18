@@ -16,6 +16,7 @@ module MissingText
       if @batch.present?
         @records = MissingText::Record.where(missing_text_batch_id: @batch.id)
         @entries = MissingText::Entry.where("missing_text_records_id in (?)", @records.pluck(:id))
+        @warnings = MissingText::Warning.where(missing_text_batch_id: @batch.id)
       end
     end
 
@@ -28,6 +29,7 @@ module MissingText
       MissingText::Batch.destroy_all
       MissingText::Record.destroy_all
       MissingText::Entry.destroy_all
+      MissingText::Warning.destroy_all
       redirect_to root_path
     end
     

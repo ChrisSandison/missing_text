@@ -51,7 +51,13 @@
                 .modal-footer
                   %button{class: "btn btn-default", data: {dismiss: "modal"}} Cancel
                   = link_to "Clear History", clear_history_path, class: "btn btn-danger", id: "clear-btn-modal"
-  
+    - if @warnings.present?
+      - @warnings.each do |warning|
+        .row
+          .col-md-offset-1.col-md-10.col-md-offset-1
+            .alert.alert-danger.text-center
+              = warning.message
+
     .row
       .text-center
         %h3.title-text= "Missing text last run on #{@batch.created_time}:"

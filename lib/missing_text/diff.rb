@@ -5,19 +5,14 @@ module MissingText
 
   class Diff
 
-    class YamlParsingError < StandardError
-    end
-
-    class RbParsingError < StandardError
-    end
-
-    attr_accessor :hashes, :languages, :langmap, :diffmap, :files, :parent_dir, :writer
+    attr_accessor :hashes, :languages, :langmap, :diffmap, :files, :parent_dir, :writer, :current_batch_id
 
     def setup!
       self.hashes = {}
       self.languages = []
       self.diffmap = {}
       self.files = []
+      self.current_batch_id = MissingText::Batch.last.id
     end
 
     alias_method :clear!, :setup!
@@ -31,10 +26,11 @@ module MissingText
       options.each do |locale_file|
 
         # store all languages we are examining for this directory and the files we are examining
-        languages << locale_file[:lang].try(:to_sym)
-        files << locale_file
+        
         parsed_locale = open_locale_file(locale_file)
         if parsed_locale.present?
+          languages << locale_file[:lang].try(:to_sym)
+          files << locale_file
           parsed_locale.each do |lang, body|
             hashes[lang] = body
           end
@@ -162,11 +158,12 @@ module MissingText
       if file[:type] == ".yml"
         parsed_file = open_yaml(file[:path])
       elsif file[:type] == ".rb"
-        parsed_file = open_rb(file[:path])
+        parsed_file = open_rb(file[:path], file[:lang])
       else
         MissingText::Warning.create(
           filename: file[:path],
-          warning_type: MissingText::Warning::FILE_TYPE_ERROR
+          warning_type: MissingText::Warning::FILE_TYPE_ERROR,
+          missing_text_batch_id: self.current_batch_id
           )
         parsed_file = {}
       end
@@ -179,21 +176,23 @@ module MissingText
       rescue => error
         MissingText::Warning.create(
           filename: yml,
-          warning_type: MissingText::Warning::YAML_PARSE
+          warning_type: MissingText::Warning::YAML_PARSE,
+          missing_text_batch_id: self.current_batch_id
         )
         file = {}
       end
       file
     end
 
-    def open_rb(rb)
+    def open_rb(rb, lang)
       begin
         file = symbolize_keys_nested!(eval(File.read(rb)))
-        file = {languages.last => file}
+        file = {lang.to_sym => file}
       rescue => error
         MissingText::Warning.create(
           filename: rb,
-          warning_type: MissingText::Warning::RB_PARSE
+          warning_type: MissingText::Warning::RB_PARSE,
+          missing_text_batch_id: self.current_batch_id
           )
         file = {}
       end

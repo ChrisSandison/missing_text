@@ -3,6 +3,7 @@ require 'missing_text'
 
 describe MissingText::Diff do
   before(:each) do
+    FactoryGirl.create(:missing_text_batch)
     @args = [
       {lang: "en", type: ".yml", path: "#{file_path}hash1/en.yml"},
       {lang: "fr", type: ".yml", path: "#{file_path}hash1/fr.yml"}

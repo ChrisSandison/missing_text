@@ -3,7 +3,6 @@ class CreateMissingTextRecords < ActiveRecord::Migration
     create_table :missing_text_records do |t|
       t.string :parent_dir
       t.text :files
-      t.text :languages
       t.timestamps
     end
   end

@@ -27,12 +27,14 @@ module MissingText
 
       if MissingText.search_direct_locale
 
-        direct_locale_files = get_file_info(
-          Dir.glob("#{MissingText.app_root}/#{MissingText.locale_root}*.yml") + 
-          Dir.glob("#{MissingText.app_root}/#{MissingText.locale_root}*.rb")
-          )
+        direct_locale_files = self.skip_files(Dir.glob("#{MissingText.app_root}/#{MissingText.locale_root}*.yml") + 
+          Dir.glob("#{MissingText.app_root}/#{MissingText.locale_root}*.rb"), "#{MissingText.app_root}/#{MissingText.locale_root}")
 
-        MissingText::Diff.new(direct_locale_files).begin!
+        if direct_locale_files.present?
+          direct_locale_files = get_file_info(direct_locale_files)
+          MissingText::Diff.new(direct_locale_files).begin!
+        end
+
       end
     end
 
@@ -60,7 +62,8 @@ module MissingText
           else
             MissingText::Warning.create(
               filename: file,
-              warning_type: MissingText::Warning::FILE_TYPE_ERROR
+              warning_type: MissingText::Warning::FILE_TYPE_ERROR,
+              missing_text_batch_id: MissingText::Batch.last.id
             )
           end
 
@@ -70,17 +73,21 @@ module MissingText
 
       def self.get_locale_files(directory)
         locale_files = Dir.glob("#{directory}/*")
+        locale_files = self.skip_files(locale_files, directory)
+        locale_files
+      end
 
-        locale_files = locale_files.select{ |file| MissingText.skip_patterns.inject(true) { |result, pattern| result && (pattern !~ File.basename(file)) } }
+      def self.skip_files(files, directory)
+        files = files.select{ |file| MissingText.skip_patterns.inject(true) { |result, pattern| result && (pattern !~ File.basename(file)) } }
 
-        if locale_files.blank?
+        if files.blank?
           MissingText::Warning.create(
             filename: directory,
-            warning_type: MissingText::Warning::STRICT_REGEX
+            warning_type: MissingText::Warning::STRICT_REGEX,
+            missing_text_batch_id: MissingText::Batch.last.id
           )
         end
-
-        locale_files
+        return files
       end
 
   end

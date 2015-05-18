@@ -46,17 +46,14 @@ module MissingText
 
         end
 
-        entry_map.each do |entry, target_langages|
-          MissingText::Entry.create(
-            missing_text_records_id: @record.id,
-            locale_code: entry.join("."),
-            base_language: lang.to_s,
-            base_string: get_entry_for(entry, lang),
-            target_languages: target_langages
-          )
-        end
+        MissingText::Entry.create(entry_map.map do |entry, target_languages|
+            {missing_text_records_id: @record.id,
+              locale_code: entry.join("."),
+              base_language: lang.to_s,
+              base_string: get_entry_for(entry, lang),
+              target_languages: target_languages}
+          end)
       end
-
     end
 
     def get_entry_for(entry, language)

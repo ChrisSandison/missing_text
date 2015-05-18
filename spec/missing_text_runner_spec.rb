@@ -9,7 +9,7 @@ describe MissingText::Runner do
       MissingText::Runner.run
       expect(MissingText::Batch.count).to eq(1)
       expect(MissingText::Record.count).to eq(5)
-      expect(MissingText::Entry.count).to eq(27)
+      expect(MissingText::Entry.count).to eq(28)
     end
 
     it "should skip specified directories as outlined in the initializer" do
@@ -43,7 +43,7 @@ describe MissingText::Runner do
 
       MissingText::Runner.run
 
-      expect(MissingText::Warning.where(warning_type: MissingText::Warning::STRICT_REGEX).count).to eq(4)
+      expect(MissingText::Warning.where(warning_type: MissingText::Warning::STRICT_REGEX).count).to eq(5)
     end
 
     it "should search specified root directory in the initializer" do
@@ -59,8 +59,8 @@ describe MissingText::Runner do
 
       MissingText::Runner.run
 
-      expect(MissingText::Warning.count).to eq(1)
-      warning = MissingText::Warning.last
+      expect(MissingText::Warning.count).to eq(2)
+      warning = MissingText::Warning.first
       expect(warning.filename).to eq("#{MissingText.app_root}/#{MissingText.locale_root}hash1/delete_me.txt")
       expect(warning.warning_type).to eq(MissingText::Warning::FILE_TYPE_ERROR)
 
