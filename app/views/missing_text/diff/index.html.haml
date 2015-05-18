@@ -11,13 +11,13 @@
           = "Please visit the Missing Text github for full configuration options."
     .row
       .text-center
-        = link_to "Run Missing Text", rerun_path, class: "btn btn-lg btn-primary"
+        = link_to "Run Missing Text", rerun_path, class: "btn btn-lg btn-primary run-missing-text-btn"
 
   - else
     .row
       .controls
         .col-md-offset-3.col-md-2.running-actions
-          = link_to "Re-Run Missing Text", rerun_path, class: "btn btn-md btn-primary"
+          = link_to "Re-Run Missing Text", rerun_path, class: "btn btn-md btn-primary run-missing-text-btn"
         .col-md-2.running-actions
           .dropdown
             %a{id: "dLabel", href: '#', role: "button", :"data-target" => '#', :"data-toggle" => "dropdown", :"aria-haspopup" => "true", :"aria-expanded" => "false", class: "btn btn-md btn-info"}
@@ -97,3 +97,9 @@
                               %code= "#{entry.target_languages.join(', ')}"
                             %td= "#{entry.base_string}"
 
+:coffeescript
+  $('#clear-btn-modal').click ->
+    $(this).text("Clearing History. One Moment Please!")
+
+  $('.run-missing-text-btn').click ->
+    waitingDialog.show('Now running! This may take a while if you have a lot of large locale files.')
