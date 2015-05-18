@@ -50,6 +50,13 @@
             .alert.alert-danger.text-center
               = warning.message
 
+
+    - if @batch.high_entry_count?
+      .row
+        .col-md-offset-1.col-md-10.col-md-offset-1
+          .alert.alert-info.text-center
+            = "You have #{@batch.entries.count} missing entries. MissingText may be parsing a lot of superfluous files. Have you added any skip_patterns in config/initializers/missing_text.rb?"
+
     .row
       .text-center
         %h3.title-text= "Missing text last run on #{@batch.created_time}:"

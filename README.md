@@ -43,20 +43,7 @@ Example::Application.routes.draw do
 end
 ```
 
-## Running MissingText outside of Development?
----
-
-**It is strongly recommended that you install MissingText in the development group of your Gemfile, or only direct to address in your routes file if you are in the development environment.** Please keep in mind that if you have a large number of locale files, this operation may take a lot of time. You may not want to tie up your production server in such a way.
-
-_However_, if you wish to have your MissingText accessible outside of development, you can control your access by overriding the controller like so:
-
-```
-class MyController < MissingText::DiffController
-	before_action :some_authenication_method
-end
-``` 
-
-Where you can perform any user authorization or setup if you choose.
+**It is strongly recommended that MissingText only run in development**.
 
 
 ## Configuration Options

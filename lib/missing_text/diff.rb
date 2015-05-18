@@ -36,7 +36,8 @@ module MissingText
           files << locale_file
 
           parsed_locale.each do |lang, body|
-            hashes[lang] = body
+            key = File.basename(files.last[:path], File.extname(files.last[:path])).to_sym
+            hashes[key] = body
           end
 
         end
@@ -122,6 +123,8 @@ module MissingText
     languages.each do |lang|
       # initialize key paths for this language hash
       langmap[lang] = []
+
+      # check to make sure that we have an entry for this filename
       # recursively build keymap
       make_keymap(langmap[lang], hashes[lang])
     end
@@ -129,6 +132,9 @@ module MissingText
 
   # outer method for creating keymap on parent hash
   def make_keymap(langmap_entry, language)
+    if language.blank?
+      binding.pry
+    end
     language.each do |key, value|
       if value.is_a? Hash
         make_keymap_for(langmap_entry, value, [key.to_sym])

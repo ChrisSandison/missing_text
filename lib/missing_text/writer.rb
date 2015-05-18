@@ -47,23 +47,30 @@ module MissingText
         end
 
         # There doesn't seem to be an efficient way to do this in one giant update... if anybody knows of another way please let me know!
-        MissingText::Entry.create(entry_map.map do |entry, target_languages|
-            {missing_text_records_id: @record.id,
-              locale_code: entry.join("."),
-              base_language: lang.to_s,
-              base_string: get_entry_for(entry, lang),
-              target_languages: target_languages}
-          end)
+        MissingText::Entry.transaction{
+          MissingText::Entry.create(entry_map.map do |entry, target_languages|
+              {missing_text_records_id: @record.id,
+                locale_code: entry.join("."),
+                base_language: lang.to_s,
+                base_string: get_entry_for(entry, lang),
+                target_languages: target_languages}
+            end)
+        }
       end
     end
 
     # Takes in a locale code and returns the string for that language
     def get_entry_for(entry, language)
       if entry.length > 1
-        get_entry_for_rec(entry[1..-1], language, hashes[language][entry[0]])
+        entry_string = get_entry_for_rec(entry[1..-1], language, hashes[language][entry[0]])
       else
-        hashes[language][entry[0]]
+        entry_string = hashes[language][entry[0]]
       end
+
+      if entry_string.kind_of?(Array)
+        entry_string = entry_string.map(&:inspect).join(', ')
+      end
+      entry_string
     end
 
     def get_entry_for_rec(entry, language, subhash)

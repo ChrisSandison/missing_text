@@ -28,10 +28,10 @@ module MissingText
     end
 
     def clear_history
-      MissingText::Batch.destroy_all
-      MissingText::Record.destroy_all
-      MissingText::Entry.destroy_all
-      MissingText::Warning.destroy_all
+      MissingText::Batch.delete_all
+      MissingText::Record.delete_all
+      MissingText::Entry.delete_all
+      MissingText::Warning.delete_all
       redirect_to root_path
     end
     

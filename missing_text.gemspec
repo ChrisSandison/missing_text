@@ -36,6 +36,7 @@ Gem::Specification.new do |s|
   s.add_development_dependency 'awesome_print'
   s.add_development_dependency "html2haml"
   s.add_development_dependency "faker"
+  s.add_development_dependency "binding_of_caller"
 end
 
 

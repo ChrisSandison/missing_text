@@ -2,6 +2,10 @@ require 'missing_text'
 require 'missing_text/writer'
 
 feature 'MissingText' do
+  before(:each) do
+    allow(MissingText).to receive(:skip_patterns).and_return([/([\w\-\_\.]+)+(en|fr|es|en\-US)(\.)?([\w\-\_\.]+)?(yml|rb|txt)/])
+    allow(MissingText).to receive(:skip_directories).and_return(['admin', 'account', 'borrowers', 'calculator', 'dashboard', 'documents', 'esignatures', 'financeit_mailer', 'industries', 'loan_application', 'loan_exceptions', 'loan_steps', 'loans', 'occupations', 'partner_referrals', 'partners', 'public', 'regions', 'reports', 'sessions', 'tour', 'vehicles', 'will_paginate'])
+  end
 
   scenario 'User visits missing_text for first time' do
     visit '/missing_text'
@@ -66,12 +70,20 @@ feature 'MissingText' do
     expect(page).to have_content("Thank you for trying Missing Text! When you click the button below, this engine will search for and display any missing translations from your locale files below. These sessions will be versioned, so you will have the ability to navigate them by date, or clear their history.")
   end
 
-  scenario 'User sees strict regex warning' do
+  scenario 'User skips en-US files' do
     allow(MissingText).to receive(:skip_patterns).and_return([/.*/])
     visit '/missing_text'
     click_link("Run Missing Text")
 
     expect(page).to have_content("No files for parsing")
+  end
+
+  scenario 'User skips en-US files' do
+    allow(MissingText).to receive(:skip_patterns).and_return([/([\w\-\_\.]+)+(en|fr|es|en\-US)(\.)?([\w\-\_\.]+)?(yml|rb|txt)/, /en\-US\.yml/])
+    visit '/missing_text'
+    click_link("Run Missing Text")
+
+    expect(page).to_not have_content("en-US")
   end
 
   scenario 'User sees yml warning' do

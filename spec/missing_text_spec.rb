@@ -8,6 +8,9 @@ describe MissingText::Diff do
       {lang: "en", type: ".yml", path: "#{file_path}hash1/en.yml"},
       {lang: "fr", type: ".yml", path: "#{file_path}hash1/fr.yml"}
     ]
+
+    allow(MissingText).to receive(:skip_patterns).and_return([/([\w\-\_\.]+)+(en|fr|es|en\-US)(\.)?([\w\-\_\.]+)?(yml|rb|txt)/])
+    allow(MissingText).to receive(:skip_directories).and_return(['admin', 'account', 'borrowers', 'calculator', 'dashboard', 'documents', 'esignatures', 'financeit_mailer', 'industries', 'loan_application', 'loan_exceptions', 'loan_steps', 'loans', 'occupations', 'partner_referrals', 'partners', 'public', 'regions', 'reports', 'sessions', 'tour', 'vehicles', 'will_paginate'])
   end
 
   context :initialization do

@@ -4,12 +4,18 @@ require 'missing_text/runner'
 require 'missing_text/writer'
 
 describe MissingText::Runner do
+
+  before(:each) do
+    allow(MissingText).to receive(:skip_patterns).and_return([/([\w\-\_\.]+)+(en|fr|es|en\-US)(\.)?([\w\-\_\.]+)?(yml|rb|txt)/])
+    allow(MissingText).to receive(:skip_directories).and_return(['admin', 'account', 'borrowers', 'calculator', 'dashboard', 'documents', 'esignatures', 'financeit_mailer', 'industries', 'loan_application', 'loan_exceptions', 'loan_steps', 'loans', 'occupations', 'partner_referrals', 'partners', 'public', 'regions', 'reports', 'sessions', 'tour', 'vehicles', 'will_paginate'])
+  end
+
   context :runner do
     it "should run everything successfully given the dummy app" do
       MissingText::Runner.run
       expect(MissingText::Batch.count).to eq(1)
       expect(MissingText::Record.count).to eq(5)
-      expect(MissingText::Entry.count).to eq(28)
+      expect(MissingText::Entry.count).to eq(65)
     end
 
     it "should skip specified directories as outlined in the initializer" do
@@ -53,19 +59,14 @@ describe MissingText::Runner do
 
     it "should railse FiletypeErrors if we attempt to read in a file that is not a .yml or a .rb" do
       # create file
-      File.open("#{MissingText.app_root}/#{MissingText.locale_root}hash1/delete_me.txt", 'w+') do |f|
-        f.write("I'm a textfile")
-      end
 
       MissingText::Runner.run
 
-      expect(MissingText::Warning.count).to eq(2)
+      expect(MissingText::Warning.count).to eq(3)
       warning = MissingText::Warning.first
       expect(warning.filename).to eq("#{MissingText.app_root}/#{MissingText.locale_root}hash1/delete_me.txt")
       expect(warning.warning_type).to eq(MissingText::Warning::FILE_TYPE_ERROR)
 
-      # delete file
-      File.delete("#{MissingText.app_root}/#{MissingText.locale_root}hash1/delete_me.txt")
     end
   end
 end
