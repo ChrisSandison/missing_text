@@ -132,9 +132,6 @@ module MissingText
 
   # outer method for creating keymap on parent hash
   def make_keymap(langmap_entry, language)
-    if language.blank?
-      binding.pry
-    end
     language.each do |key, value|
       if value.is_a? Hash
         make_keymap_for(langmap_entry, value, [key.to_sym])
