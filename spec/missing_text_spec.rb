@@ -13,15 +13,16 @@ describe MissingText::Diff do
     allow(MissingText).to receive(:skip_directories).and_return(['admin', 'account', 'borrowers', 'calculator', 'dashboard', 'documents', 'esignatures', 'financeit_mailer', 'industries', 'loan_application', 'loan_exceptions', 'loan_steps', 'loans', 'occupations', 'partner_referrals', 'partners', 'public', 'regions', 'reports', 'sessions', 'tour', 'vehicles', 'will_paginate'])
   end
 
-  context :initialization do
+  context :setup! do
 
     it "should build languages out of specified options file" do
-      expect(MissingText::Diff.new(@args).languages).to eq([:en, :fr])
+      @m = MissingText::Diff.new(@args).setup!
+      expect(@m.languages).to eq([:en, :fr])
     end
 
     it "should raise an exception if a yaml file can not be read" do
       @args[0][:path] = 'nohash/en.yml'
-      MissingText::Diff.new(@args)
+      @m = MissingText::Diff.new(@args).setup!
       expect(MissingText::Warning.count).to eq(1)
       warning = MissingText::Warning.last
       expect(warning.filename).to eq("nohash/en.yml")
@@ -29,13 +30,14 @@ describe MissingText::Diff do
     end
 
     it "should read in a file saved as an .rb" do
-     expect( MissingText::Diff.new([{lang: "en", type: ".rb", path: "#{file_path}rbs/en.rb"}]).languages ).to eq([:en])
+      @m = MissingText::Diff.new([{lang: "en", type: ".rb", path: "#{file_path}rbs/en.rb"}]).setup!
+     expect( @m.languages ).to eq([:en])
     end
 
     it "should raise an exception if an rn file can not be read" do
       @args[0][:type] = ".rb"
       @args[0][:path] = 'nohash/en.rb'
-      MissingText::Diff.new(@args)
+      @m = MissingText::Diff.new(@args).setup!
       expect(MissingText::Warning.count).to eq(1)
       warning = MissingText::Warning.last
       expect(warning.filename).to eq('nohash/en.rb')
@@ -43,7 +45,7 @@ describe MissingText::Diff do
     end
 
     it "should save the files that are opened and remember the parent directory" do
-      @diff = MissingText::Diff.new(@args)
+      @diff = MissingText::Diff.new(@args).setup!
       expect(@diff.files).to eq(
         [
           {:lang=>"en", :type=>".yml", :path=>"#{file_path}hash1/en.yml"},
@@ -60,7 +62,7 @@ describe MissingText::Diff do
       @hash2 = {"key3" => @hash1 }
       @hash3 = {"key4" => @hash2 }
       @hash4 = {"key5" => @hash3 }
-      @diff = MissingText::Diff.new(@args)
+      @diff = MissingText::Diff.new(@args).setup!
     end
 
     it "should symbolize keys for a flat hash" do
@@ -88,42 +90,42 @@ describe MissingText::Diff do
   context :keymapping do
     it "should create a proper keymap for hash1_en.yml" do
       @args = [{lang: "en", type: ".yml", path: "#{file_path}hash1/en.yml"}]
-      @diff = MissingText::Diff.new(@args)
+      @diff = MissingText::Diff.new(@args).setup!
       @diff.create_langmap!
       expect(@diff.langmap[:en]).to match_array([[:obj1], [:obj2], [:obj3, :obj31], [:obj3, :obj32]])
     end
 
     it "should create a proper keymap for hash1_fr.yml" do
       @args = [{lang: "fr", type: ".yml", path: "#{file_path}hash1/fr.yml"}]
-      @diff = MissingText::Diff.new(@args)
+      @diff = MissingText::Diff.new(@args).setup!
       @diff.create_langmap!
       expect(@diff.langmap[:fr]).to match_array([[:obj1], [:obj3, :obj31]])
     end
 
     it "should create a proper keymap for hash2_en.yml" do
       @args = [{lang: "en", type: ".yml", path: "#{file_path}hash2/en.yml"}]
-      @diff = MissingText::Diff.new(@args)
+      @diff = MissingText::Diff.new(@args).setup!
       @diff.create_langmap!
       expect(@diff.langmap[:en]).to match_array([[:obj1], [:obj2], [:obj3], [:obj4, :obj41], [:obj4, :obj42], [:obj4, :obj43, :obj431], [:obj4, :obj43, :obj432], [:obj4, :obj44], [:obj5], [:obj6]])
     end
 
     it "should create a proper keymap for hash2_fr.yml" do
       @args = [{lang: "fr", type: ".yml", path: "#{file_path}hash2/fr.yml"}]
-      @diff = MissingText::Diff.new(@args)
+      @diff = MissingText::Diff.new(@args).setup!
       @diff.create_langmap!
       expect(@diff.langmap[:fr]).to match_array([[:obj1], [:obj4, :obj41], [:obj4, :obj43, :obj431], [:obj4, :obj44], [:obj5]])
     end
 
     it "should create a proper keymap for hash3_en.yml" do
       @args = [{lang: "en", type: ".yml", path: "#{file_path}hash3/en.yml"}]
-      @diff = MissingText::Diff.new(@args)
+      @diff = MissingText::Diff.new(@args).setup!
       @diff.create_langmap!
       expect(@diff.langmap[:en]).to match_array([[:obj1, :obj13, :obj131], [:obj1, :obj13, :obj132], [:obj1, :obj13, :obj134], [:obj1, :obj14]])
     end
 
     it "should create a proper keymap for hash3_fr.yml" do
       @args = [{lang: "fr", type: ".yml", path: "#{file_path}hash3/fr.yml"}]
-      @diff = MissingText::Diff.new(@args)
+      @diff = MissingText::Diff.new(@args).setup!
       @diff.create_langmap!
       expect(@diff.langmap[:fr]).to match_array([[:obj1, :obj11], [:obj1, :obj12], [:obj1, :obj13, :obj131], [:obj1, :obj13, :obj132], [:obj1, :obj13, :obj133, :obj1331], [:obj1, :obj13, :obj134], [:obj1, :obj14], [:obj1, :obj15]])
     end
@@ -135,7 +137,7 @@ describe MissingText::Diff do
         {lang: "en", type: ".yml", path: "#{file_path}hash1/en.yml"},
         {lang: "fr", type: ".yml", path: "#{file_path}hash1/fr.yml"}
       ]
-      @diff = MissingText::Diff.new(@args)
+      @diff = MissingText::Diff.new(@args).setup!
       @diff.create_langmap!
       @diff.create_diffmap!
       expect(@diff.diffmap[[:en, :fr]]).to match_array([[:obj2], [:obj3, :obj32]])
@@ -147,7 +149,7 @@ describe MissingText::Diff do
         {lang: "en", type: ".yml", path: "#{file_path}hash2/en.yml"},
         {lang: "fr", type: ".yml", path: "#{file_path}hash2/fr.yml"}
       ]
-      @diff = MissingText::Diff.new(@args)
+      @diff = MissingText::Diff.new(@args).setup!
       @diff.create_langmap!
       @diff.create_diffmap!
       expect(@diff.diffmap[[:en, :fr]]).to match_array([[:obj2], [:obj3], [:obj4, :obj42], [:obj4, :obj43, :obj432], [:obj6]])
@@ -159,7 +161,7 @@ describe MissingText::Diff do
         {lang: "en", type: ".yml", path: "#{file_path}hash3/en.yml"},
         {lang: "fr", type: ".yml", path: "#{file_path}hash3/fr.yml"}
       ]
-      @diff = MissingText::Diff.new(@args)
+      @diff = MissingText::Diff.new(@args).setup!
       @diff.create_langmap!
       @diff.create_diffmap!
       expect(@diff.diffmap[[:en, :fr]]).to match_array([])
@@ -173,7 +175,7 @@ describe MissingText::Diff do
         {lang: "es", type: ".yml", path: "#{file_path}es.yml"}
       ]
 
-      @diff = MissingText::Diff.new(@args)
+      @diff = MissingText::Diff.new(@args).setup!
       @diff.create_langmap!
       @diff.create_diffmap!
       expect(@diff.diffmap[[:en, :fr]]).to match_array([[:obj1, :obj13, :obj131], [:obj1, :obj13, :obj132], [:obj1, :obj13, :obj134], [:obj1, :obj14]])
