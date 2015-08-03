@@ -4,7 +4,6 @@ MissingText.locale_root = "config/locales/"
 # Include any directories in locales/ that you would like to skip. By default this will be appended to "." and "..". Please make these paths relative to your locale_root
 MissingText.skip_directories = []
 
-
 # Include an array of regexes for any filenames (and their extensions) that you would like skipped. For example, if you have both an en.yml and an en-uk.yml then add [/en\-uk\.yml/]
 MissingText.skip_patterns = []
 

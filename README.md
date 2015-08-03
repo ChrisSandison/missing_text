@@ -54,6 +54,19 @@ end
 * `MissingText.search_direct_locale`- Include the search of the locale root itself (e.g. `config/locales`) when looking for missing translations. This is true by default.
 * `MissingText.skip_patterns` - An array of regexes that specify what kind of files to skip. For example, if you have both an "en.yml" and an "en-UK.yml", but you would not like the diff operation to be performed on these two, you can add /en\-uk\.yml/.
 
+## Integration with Whenever
+---
+
+If you would like to run MissingText as a cronjob and are using Whenever, add the following to your `schedule.rb` file.
+
+```
+every 10.days, :at => '2:30 am' do
+  runner 'MissingText::Runner.run', :environment => ...
+end
+```
+
+This will run as though it is being run from the web interface and will create a batch for that current time.
+
 ## Development and Contribution
 ---
 
