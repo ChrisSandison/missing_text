@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150518130131) do
+ActiveRecord::Schema.define(version: 20150624143542) do
 
   create_table "missing_text_batches", force: true do |t|
     t.datetime "created_at"
@@ -23,9 +23,9 @@ ActiveRecord::Schema.define(version: 20150518130131) do
     t.string   "base_language"
     t.string   "base_string"
     t.text     "target_languages"
+    t.string   "locale_code"
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.string   "locale_code"
   end
 
   create_table "missing_text_records", force: true do |t|

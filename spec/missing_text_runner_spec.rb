@@ -15,7 +15,7 @@ describe MissingText::Runner do
       MissingText::Runner.run
       expect(MissingText::Batch.count).to eq(1)
       expect(MissingText::Record.count).to eq(5)
-      expect(MissingText::Entry.count).to eq(65)
+      expect(MissingText::Entry.count).to eq(28)
     end
 
     it "should skip specified directories as outlined in the initializer" do

@@ -5,25 +5,21 @@ module MissingText
 
   class Diff
 
-    attr_accessor :hashes, :languages, :langmap, :diffmap, :files, :parent_dir, :writer, :current_batch_id
+    attr_accessor :hashes, :languages, :langmap, :diffmap, :files, :parent_dir, :writer, :current_batch_id, :diff_files
 
-    def setup!
+    def initialize(options = [])
       self.hashes = {}
       self.languages = []
       self.diffmap = {}
       self.files = []
-      self.current_batch_id = MissingText::Batch.last.id
-    end
-
-    alias_method :clear!, :setup!
-
-    def initialize(options = [])
-      setup!
-
-      # save the name of the parent directory that we are operating on
       self.parent_dir = File.basename(File.expand_path("..", options[0][:path])) 
+      self.diff_files = options
+      self.current_batch_id = MissingText::Batch.last.id
+    end 
 
-      options.each do |locale_file|
+    def setup!(options = [])
+      # save the name of the parent directory that we are operating on
+      self.diff_files.each do |locale_file|
 
         # store all languages we are examining for this directory and the files we are examining
         
@@ -42,6 +38,8 @@ module MissingText
 
         end
       end
+      
+      self
     end
 
   #
@@ -51,6 +49,7 @@ module MissingText
   #
 
   def begin!(options = {})
+    setup!
     create_langmap!
     create_diffmap!
     print_missing_translations
